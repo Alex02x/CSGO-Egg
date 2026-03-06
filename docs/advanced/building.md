@@ -107,7 +107,7 @@ After building and pushing your image:
 
 ### For Private Registries
 
-If using a private Docker Hub repository or private registry, you must authenticate on **all Pterodactyl nodes**:
+If you switch to a private Docker Hub repository or private registry, you must authenticate on **all Pterodactyl nodes**:
 
 ```bash
 # SSH into each Pterodactyl node
@@ -119,7 +119,7 @@ docker login
 # Enter your credentials when prompted
 ```
 
-**Important:** Pterodactyl nodes need registry access to pull private images. Without authentication, container creation will fail with "pull access denied" errors.
+> **Note:** The default `degrando/csgo-egg` image is public and does not require authentication.
 
 ## Modifying the Image
 

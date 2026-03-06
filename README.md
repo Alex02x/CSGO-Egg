@@ -63,32 +63,17 @@ Each framework can be enabled/disabled independently via Pterodactyl panel. Auto
 
 Import `pterodactyl/degrando-csgo-egg.json` into your Pterodactyl panel.
 
-### 2. Configure Docker Hub Credentials
-
-Since the Docker image is private, configure Docker Hub credentials in Pterodactyl Wings:
-
-Edit `/etc/pterodactyl/config.yml` on each Wings node:
-```yaml
-docker:
-  registries:
-    docker.io:
-      username: "your-dockerhub-username"
-      password: "your-dockerhub-token"
-```
-
-Restart Wings: `systemctl restart wings`
-
-### 3. Build the Docker Image
+### 2. Build the Docker Image
 
 ```bash
 # Build locally
 ./build.sh latest
 
-# Build and push to private Docker Hub
+# Build and push to Docker Hub
 ./build.sh latest -d
 ```
 
-### 4. Create a Server
+### 3. Create a Server
 
 Create a new server in Pterodactyl using the "Greyweb @ degrando CSGO Egg".
 

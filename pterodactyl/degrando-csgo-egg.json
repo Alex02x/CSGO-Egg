@@ -6,11 +6,11 @@
   },
   "exported_at": "2026-03-06T00:00:00+00:00",
   "name": "Greyweb @ degrando CSGO Egg",
-  "author": "greyweb.cloud",
+  "author": "admin@greyweb.cloud",
   "description": "SteamRT3 Platform image for Pterodactyl CSGO servers with MetaMod + SourceMod auto-updaters, VPK sync, console filter, and junk cleaner.",
   "features": [],
   "docker_images": {
-    "Degrando CSGO - Private Docker Hub": "docker.io/degrando/csgo-egg:latest"
+    "Degrando CSGO - Docker Hub": "docker.io/degrando/csgo-egg:latest"
   },
   "file_denylist": [],
   "startup": "./srcds_run -game csgo {{CUSTOM_PARAMS}} -console -usercon -ip 0.0.0.0 -port {{SERVER_PORT}} +map {{SRCDS_MAP}} -maxplayers {{SRCDS_MAXPLAYERS}} +sv_setsteamaccount {{STEAM_ACC}} +game_type {{GAME_TYPE}} +game_mode {{GAME_MODE}}",

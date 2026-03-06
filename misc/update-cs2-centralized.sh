@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 # Degrando CSGO Centralized Update Script
 # Automatically updates CSGO files and optionally restarts all affected servers
 # Designed for use with VPK Sync feature
