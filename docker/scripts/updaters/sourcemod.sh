@@ -18,7 +18,7 @@ update_sourcemod() {
         log_message "Using SourceMod $SM_BRANCH branch" "debug"
     fi
 
-    local sm_version=$(curl -sL "https://sm.alliedmods.net/smdrop/${SM_BRANCH}/" | grep -o 'href="sourcemod-[^"]*-linux\.[^"]*\.tar\.gz' | sed 's/href="//' | tail -1)
+    local sm_version=$(curl -sL "https://sm.alliedmods.net/smdrop/${SM_BRANCH}/" | grep -o 'href="sourcemod-[^"]*-linux\.tar\.gz' | sed 's/href="//' | tail -1)
     local download_failed=0
 
     if [ -z "$sm_version" ]; then
@@ -61,6 +61,11 @@ update_sourcemod() {
     fi
 
     # Fallback: use bundled tar.gz if download failed and not yet installed
+    if [ -d "$OUTPUT_DIR/sourcemod" ]; then
+        log_message "SourceMod already installed, skipping fallback" "debug"
+    elif [ ! -f "/addons/sourcemod-bundled.tar.gz" ]; then
+        log_message "Bundled SourceMod archive not found in image" "error"
+    fi
     if [ ! -d "$OUTPUT_DIR/sourcemod" ] && [ -f "/addons/sourcemod-bundled.tar.gz" ]; then
         log_message "Using bundled SourceMod as fallback..." "warning"
         mkdir -p "$TEMP_DIR/sourcemod"

@@ -46,6 +46,8 @@ update_metamod() {
         log_message "Update available for Metamod: $new_version (current: ${current_version:-none})" "info"
 
         if handle_download_and_extract "$full_url" "$TEMP_DIR/metamod.tar.gz" "$TEMP_DIR/metamod" "tar.gz"; then
+            # Remove x64 VDF — CSGO srcds is 32-bit, x64 VDF causes ELFCLASS64 errors
+            rm -f "$TEMP_DIR/metamod/addons/metamod_x64.vdf"
             cp -rf "$TEMP_DIR/metamod/addons/." "$OUTPUT_DIR/" && \
             update_version_file "Metamod" "$new_version" && \
             log_message "Metamod updated to $new_version" "success"
@@ -59,6 +61,7 @@ update_metamod() {
         mkdir -p "$TEMP_DIR/metamod"
         tar -xzf /addons/mmsource-bundled.tar.gz -C "$TEMP_DIR/metamod" 2>/dev/null
         if [ -d "$TEMP_DIR/metamod/addons" ]; then
+            rm -f "$TEMP_DIR/metamod/addons/metamod_x64.vdf"
             cp -rf "$TEMP_DIR/metamod/addons/." "$OUTPUT_DIR/" && \
             update_version_file "Metamod" "bundled" && \
             log_message "Metamod installed from bundled archive" "success"

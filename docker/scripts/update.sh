@@ -81,8 +81,9 @@ update_addons() {
             log_message "update_metamod function not available" "error"
         fi
 
-        # Configure metamod in gameinfo.txt
-        add_to_gameinfo "csgo/addons/metamod"
+        # CSGO loads MetaMod via VDF files (metamod.vdf), no gameinfo.txt patching needed
+        # Remove x64 VDF if present (32-bit srcds can't load it, causes ELFCLASS64 error)
+        rm -f "./csgo/addons/metamod_x64.vdf"
     fi
 
     # SourceMod
@@ -98,8 +99,7 @@ update_addons() {
         install_nolobbyreservation
     fi
 
-    # Ensure MetaMod is always first addon after LowViolence (if present)
-    ensure_metamod_first
+    # CSGO uses VDF-based MetaMod loading, no gameinfo.txt reordering needed
 
     # Clean up
     rm -rf "$TEMP_DIR"
