@@ -40,22 +40,29 @@ sync_files() {
 
     # Make sure the source directory actually exists
     if [ ! -d "$src_dir" ]; then
-        log_message "Sync location not found: $src_dir" "error"
-        log_message "SYNC_LOCATION directory not found: $src_dir" "error"
-        log_message "Make sure SYNC_LOCATION matches the path where your files are actually mounted to (TARGET)." "error"
-        exit 1
+        log_message "Sync location not found: $src_dir" "warning"
+        log_message "SYNC_LOCATION is set but the directory does not exist. Skipping VPK sync." "warning"
+        log_message "Make sure the mount is attached to this server in the panel (Admin -> Server -> Mounts -> click +)." "warning"
+        return 0
     fi
 
     log_message "Syncing VPK files..." "info"
 
-    # Sync everything EXCEPT .vpk files, configs, and gameinfo.txt
+    # Sync everything EXCEPT .vpk files, cfg/, and gameinfo.txt
     # We'll symlink VPKs separately to save space
-    # gameinfo.txt is excluded to preserve addon configurations
+    # cfg/ and gameinfo.txt are handled separately to preserve per-server configs
     if rsync -aKLz --exclude '*.vpk' --exclude 'cfg/' --exclude 'csgo/gameinfo.txt' "$src_dir/" "$dest_dir" 2>/dev/null; then
         : # base files synced silently
     else
         log_message "Failed to sync base files" "error"
         return 1
+    fi
+
+    # Sync cfg/ with --ignore-existing so core engine files (valve.rc etc.)
+    # are copied on first boot, but per-server configs (server.cfg) are never overwritten
+    if [ -d "$src_dir/csgo/cfg" ]; then
+        mkdir -p "$dest_dir/csgo/cfg" 2>/dev/null
+        rsync -aKLz --ignore-existing "$src_dir/csgo/cfg/" "$dest_dir/csgo/cfg/" 2>/dev/null
     fi
 
     # Copy gameinfo.txt only if it doesn't exist (first boot)
