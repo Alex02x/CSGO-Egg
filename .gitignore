@@ -11,6 +11,10 @@
 # Exception: bundled plugins for Docker image
 !docker/plugins/**/*.smx
 
+# Tar archives (except bundled addons)
+*.tar.gz
+!docker/addons/*.tar.gz
+
 # Others
 *.exe
 *.dat

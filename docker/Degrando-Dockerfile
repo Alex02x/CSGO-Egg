@@ -16,10 +16,11 @@ RUN         apt update && \
             apt-get clean
 
 # Create directories and copy files
-RUN         mkdir -p /scripts /utils /plugins/nolobbyreservation
+RUN         mkdir -p /scripts /utils /plugins/nolobbyreservation /addons
 COPY        ./scripts /scripts/
 COPY        ./utils /utils/
 COPY        ./plugins/nolobbyreservation /plugins/nolobbyreservation/
+COPY        ./addons /addons/
 COPY        ./entrypoint.sh /entrypoint.sh
 
 # Set permissions (read-only + executable)
@@ -27,7 +28,8 @@ RUN         chmod 555 /scripts/*.sh && \
             chmod 555 /scripts/updaters/*.sh && \
             chmod 555 /utils/*.sh && \
             chmod 555 /entrypoint.sh && \
-            chmod 444 /plugins/nolobbyreservation/*
+            chmod 444 /plugins/nolobbyreservation/* && \
+            chmod 444 /addons/*
 
 USER        container
 ENV         USER=container HOME=/home/container
