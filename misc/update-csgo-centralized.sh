@@ -464,6 +464,13 @@ update_csgo() {
     chown -R pterodactyl:pterodactyl "$CSGO_DIR" 2>/dev/null || true
     chmod -R 755 "$CSGO_DIR"
 
+    # Patch steam.inf for new CSGO AppID (4465480)
+    local steam_inf="$CSGO_DIR/csgo/steam.inf"
+    if [ -f "$steam_inf" ] && grep -q "appID=730" "$steam_inf"; then
+        sed -i 's/appID=730/appID=4465480/' "$steam_inf"
+        log_info "Patched steam.inf: appID=730 -> 4465480"
+    fi
+
     local size=$(du -sh "$CSGO_DIR" 2>/dev/null | cut -f1)
     log_info "CSGO directory size: ${BOLD}$size${RESET}"
 

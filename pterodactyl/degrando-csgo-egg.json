@@ -90,7 +90,7 @@
     },
     {
       "name": "Game Server Login Token (GSLT)",
-      "description": "The Steam Game Server Login Token (GSLT) used to publicly list your server. Optional, but recommended for increased visibility and access to additional features. Learn more: https://steamcommunity.com/dev/managegameservers",
+      "description": "The Steam Game Server Login Token (GSLT) for your server. IMPORTANT: Create with AppID 4465480 (not 730). Get one at https://steamcommunity.com/dev/managegameservers",
       "env_variable": "STEAM_ACC",
       "default_value": "",
       "user_viewable": true,

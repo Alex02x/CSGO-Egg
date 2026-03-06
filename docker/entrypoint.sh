@@ -113,6 +113,16 @@ if [ -n "${SRCDS_APPID}" ] && [ "${SRCDS_STOP_UPDATE:-0}" -eq 0 ]; then
     cp -f ./steamcmd/linux64/steamclient.so ./.steam/sdk64/steamclient.so
 fi
 
+# Patch steam.inf to use new CSGO AppID (4465480) so updated clients can connect
+# SteamCMD installs with appID=730, but the new standalone CSGO uses 4465480
+STEAM_INF="/home/container/csgo/steam.inf"
+if [ -f "$STEAM_INF" ]; then
+    if grep -q "appID=730" "$STEAM_INF"; then
+        sed -i 's/appID=730/appID=4465480/' "$STEAM_INF"
+        log_message "Patched steam.inf: appID=730 -> 4465480" "info"
+    fi
+fi
+
 # Handle the addon installations based on the selection
 update_addons
 
