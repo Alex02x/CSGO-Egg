@@ -8,6 +8,8 @@
 
 # SourcePawn
 *.smx
+# Exception: bundled plugins for Docker image
+!docker/plugins/**/*.smx
 
 # Others
 *.exe
