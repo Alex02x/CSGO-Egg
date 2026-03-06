@@ -52,29 +52,29 @@ if [ -n "${SRCDS_APPID}" ] && [ "${SRCDS_STOP_UPDATE:-0}" -eq 0 ]; then
             if [ "${SRCDS_VALIDATE}" -eq 1 ]; then
                 log_message "Validation enabled: THIS MAY WIPE CUSTOM CONFIGURATIONS!" "error"
                 if [ -n "${SRCDS_LOGIN}" ]; then
-                    STEAMCMD="./steamcmd/steamcmd.sh +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} validate +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} validate +quit"
                 else
-                    STEAMCMD="./steamcmd/steamcmd.sh +login anonymous +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} validate +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login anonymous +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} validate +quit"
                 fi
             else
                 if [ -n "${SRCDS_LOGIN}" ]; then
-                    STEAMCMD="./steamcmd/steamcmd.sh +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} +quit"
                 else
-                    STEAMCMD="./steamcmd/steamcmd.sh +login anonymous +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login anonymous +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} -betapassword ${SRCDS_BETAPASS} +quit"
                 fi
             fi
         else
             if [ "${SRCDS_VALIDATE}" -eq 1 ]; then
                 if [ -n "${SRCDS_LOGIN}" ]; then
-                    STEAMCMD="./steamcmd/steamcmd.sh +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} validate +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} validate +quit"
                 else
-                    STEAMCMD="./steamcmd/steamcmd.sh +login anonymous +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} validate +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login anonymous +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} validate +quit"
                 fi
             else
                 if [ -n "${SRCDS_LOGIN}" ]; then
-                    STEAMCMD="./steamcmd/steamcmd.sh +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} +quit"
                 else
-                    STEAMCMD="./steamcmd/steamcmd.sh +login anonymous +force_install_dir /home/container +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} +quit"
+                    STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login anonymous +app_update ${SRCDS_APPID} -beta ${SRCDS_BETAID} +quit"
                 fi
             fi
         fi
@@ -82,15 +82,15 @@ if [ -n "${SRCDS_APPID}" ] && [ "${SRCDS_STOP_UPDATE:-0}" -eq 0 ]; then
         if [ "${SRCDS_VALIDATE}" -eq 1 ]; then
             log_message "Validation enabled: THIS MAY WIPE CUSTOM CONFIGURATIONS!" "error"
             if [ -n "${SRCDS_LOGIN}" ]; then
-                STEAMCMD="./steamcmd/steamcmd.sh +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +force_install_dir /home/container +app_update ${SRCDS_APPID} validate +quit"
+                STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +app_update ${SRCDS_APPID} validate +quit"
             else
-                STEAMCMD="./steamcmd/steamcmd.sh +login anonymous +force_install_dir /home/container +app_update ${SRCDS_APPID} validate +quit"
+                STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login anonymous +app_update ${SRCDS_APPID} validate +quit"
             fi
         else
             if [ -n "${SRCDS_LOGIN}" ]; then
-                STEAMCMD="./steamcmd/steamcmd.sh +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +force_install_dir /home/container +app_update ${SRCDS_APPID} +quit"
+                STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${SRCDS_LOGIN} ${SRCDS_LOGIN_PASS} +app_update ${SRCDS_APPID} +quit"
             else
-                STEAMCMD="./steamcmd/steamcmd.sh +login anonymous +force_install_dir /home/container +app_update ${SRCDS_APPID} +quit"
+                STEAMCMD="./steamcmd/steamcmd.sh +force_install_dir /home/container +login anonymous +app_update ${SRCDS_APPID} +quit"
             fi
         fi
     fi
