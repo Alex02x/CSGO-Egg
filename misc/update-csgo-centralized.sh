@@ -45,7 +45,8 @@ VALIDATE_INSTALL="false"
 # Optional: Enable automatic script self-update (true/false)
 # Script checks GitHub for updates and auto-replaces itself
 # Keeps last 3 versions as backup, validates before applying
-AUTO_UPDATE_SCRIPT="true"
+# Set to "true" only after setting GITHUB_REPO below
+AUTO_UPDATE_SCRIPT="false"
 
 # Optional: Interval between update checks in seconds (default: 600 = 10 minutes)
 # Script will only check for updates if this interval has elapsed
