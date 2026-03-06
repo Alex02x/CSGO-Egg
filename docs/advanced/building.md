@@ -1,4 +1,4 @@
-# Building from Source
+﻿# Building from Source
 
 This guide explains how to build your own Docker image from the source code.
 
@@ -34,7 +34,7 @@ Before building, edit the `build.sh` script to use your own Docker Hub username 
 
 1. Open `build.sh` in a text editor
 2. Find the `IMAGE_NAME` variable
-3. Change `sples1/k4ryuu-cs2` to your registry (e.g., `yourusername/cs2-server`)
+3. Change `degrando/csgo-egg` to your registry (e.g., `yourusername/csgo-server`)
 4. Save and run with your desired tag
 
 **What the script does:**
@@ -53,10 +53,10 @@ If you prefer to build manually:
 cd docker
 
 # Build the image
-docker build -f KitsuneLab-Dockerfile -t your-registry/your-image:tag .
+docker build -f Degrando-Dockerfile -t your-registry/your-image:tag .
 
 # Example
-docker build -f KitsuneLab-Dockerfile -t myrepo/cs2-server:latest .
+docker build -f Degrando-Dockerfile -t myrepo/csgo-server:latest .
 ```
 
 ## Build Arguments
@@ -96,8 +96,8 @@ After building and pushing your image:
 
 ### Configure the Egg
 
-1. Go to **Admin** → **Nests** → Your Nest → **Eggs**
-2. Edit the KitsuneLab CS2 Egg
+1. Go to **Admin** в†’ **Nests** в†’ Your Nest в†’ **Eggs**
+2. Edit the Degrando CSGO Egg
 3. In **Docker Images** section, add your custom image:
    ```json
    "My Custom Image": "your-registry/your-image:tag"
@@ -125,7 +125,7 @@ docker login
 
 ### Adding Packages
 
-Edit `docker/KitsuneLab-Dockerfile`:
+Edit `docker/Degrando-Dockerfile`:
 
 ```dockerfile
 ENV         DEBIAN_FRONTEND=noninteractive
@@ -183,26 +183,26 @@ The `build.sh` script provides a streamlined building experience with multiple o
 The script provides a modern, colorful output with progress indicators:
 
 ```
-──────────────────────────────────────────────────────
- KitsuneLab CS2 Docker Image Builder
-──────────────────────────────────────────────────────
-Image: sples1/k4ryuu-cs2:latest
+в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+ Degrando CSGO Docker Image Builder
+в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+Image: degrando/csgo-egg:latest
 
 
 ==> Building Docker image
 
-🔷 INFO  Dockerfile: KitsuneLab-Dockerfile
-🔷 INFO  Tag:        latest
+рџ”· INFO  Dockerfile: Degrando-Dockerfile
+рџ”· INFO  Tag:        latest
 Building image
-⠋ Building image
-[✓] DONE  Building image finished in 45s
-🔷 INFO  Image size: 1.23 GB
+в ‹ Building image
+[вњ“] DONE  Building image finished in 45s
+рџ”· INFO  Image size: 1.23 GB
 
 
 ==> Next steps
 
 To push to Docker Hub, run:
-  docker push sples1/k4ryuu-cs2:latest
+  docker push degrando/csgo-egg:latest
 ```
 
 **Features:**
@@ -218,12 +218,12 @@ To build for multiple architectures (AMD64, ARM64):
 
 ```bash
 # Create a builder
-docker buildx create --name cs2-builder --use
+docker buildx create --name csgo-builder --use
 
 # Build for multiple platforms
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  -f docker/KitsuneLab-Dockerfile \
+  -f docker/Degrando-Dockerfile \
   -t your-registry/your-image:tag \
   --push \
   .
@@ -263,11 +263,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./docker
-          file: ./docker/KitsuneLab-Dockerfile
+          file: ./docker/Degrando-Dockerfile
           push: true
           tags: |
-            sples1/k4ryuu-cs2:${{ github.ref_name }}
-            sples1/k4ryuu-cs2:latest
+            degrando/csgo-egg:${{ github.ref_name }}
+            degrando/csgo-egg:latest
 ```
 
 ## Troubleshooting Build Issues
@@ -279,7 +279,7 @@ jobs:
 docker builder prune
 
 # Rebuild without cache
-docker build --no-cache -f docker/KitsuneLab-Dockerfile -t your-image:tag .
+docker build --no-cache -f docker/Degrando-Dockerfile -t your-image:tag .
 ```
 
 ### Permission Denied Errors
@@ -327,5 +327,5 @@ See [Contributing Guide](contributing.md) for details.
 
 Need help with building?
 
-- [Report an Issue](https://github.com/K4ryuu/CS2-Egg/issues)
+- [Report an Issue](https://github.com/degrando/csgo-egg/issues)
 - Check existing build-related issues

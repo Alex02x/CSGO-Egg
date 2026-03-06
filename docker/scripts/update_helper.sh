@@ -7,7 +7,7 @@ source /utils/logging.sh
 migrate_legacy_files() {
     local egg_dir="/home/container/egg"
     local old_log="/home/container/egg.log"
-    local old_version="/home/container/game/versions.txt"
+    local old_version="/home/container/versions.txt"
     local old_mute_cfg="/home/container/game/mute_messages.cfg"
 
     # Only run if the egg directory doesn't exist yet
@@ -90,7 +90,7 @@ migrate_legacy_files() {
   "_description": [
     "Console Filter Configuration",
     "",
-    "Filter unwanted console messages from CS2 server output.",
+    "Filter unwanted console messages from CSGO server output.",
     "",
     "Settings:",
     "  - preview_mode: Show blocked messages in debug log (true/false)",
@@ -173,9 +173,7 @@ check_deprecated_variables() {
         log_message "The ADDON_SELECTION variable is deprecated and will be removed in the next update!" "warning"
         log_message "Please update your Pterodactyl egg to use the new multi-framework support:" "warning"
         log_message "  → INSTALL_METAMOD (boolean)" "warning"
-        log_message "  → INSTALL_CSS (boolean)" "warning"
-        log_message "  → INSTALL_SWIFTLY (boolean)" "warning"
-        log_message "  → INSTALL_MODSHARP (boolean)" "warning"
+        log_message "  → INSTALL_SOURCEMOD (boolean)" "warning"
         log_message "Current ADDON_SELECTION value: ${ADDON_SELECTION}" "warning"
         log_message "This will continue to work for now, but UPDATE YOUR EGG before the next patch!" "warning"
         found_deprecated=true
@@ -186,9 +184,9 @@ check_deprecated_variables() {
         log_message "⚠️  DEPRECATION WARNING ⚠️" "warning"
         log_message "AUTO_UPDATE/UPDATE_AUTO_RESTART variables are deprecated!" "warning"
         log_message "Internal auto-restart has been replaced by the centralized update script." "warning"
-        log_message "For automatic CS2 updates and server restarts:" "warning"
-        log_message "  → Use: misc/update-cs2-centralized.sh" "warning"
-        log_message "  → Documentation: https://github.com/K4ryuu/CS2-Egg/blob/main/docs/features/vpk-sync.md" "warning"
+        log_message "For automatic CSGO updates and server restarts:" "warning"
+        log_message "  → Use: misc/update-csgo-centralized.sh" "warning"
+        log_message "  → Documentation: See docs/features/vpk-sync.md" "warning"
         found_deprecated=true
     fi
 }

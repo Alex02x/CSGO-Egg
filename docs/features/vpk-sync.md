@@ -1,21 +1,21 @@
-# VPK Sync Feature
+﻿# VPK Sync Feature
 
-Dramatically reduce storage and bandwidth by centralizing CS2 game files.
+Dramatically reduce storage and bandwidth by centralizing CSGO game files.
 
 ## Overview
 
-VPK Sync allows multiple CS2 servers to share game files from a single centralized location instead of each server storing its own complete copy.
+VPK Sync allows multiple CSGO servers to share game files from a single centralized location instead of each server storing its own complete copy.
 
 **Storage Savings:**
 
 - Without sync: ~55GB per server
 - With sync: ~3GB per server (configs + workshop only)
 - **Savings per server: ~52GB** (real data)
-- **10 servers**: 550GB → 82GB (85% reduction)
+- **10 servers**: 550GB в†’ 82GB (85% reduction)
 
 **How It Works:**
 
-1. Automated cron job keeps centralized CS2 installation updated
+1. Automated cron job keeps centralized CSGO installation updated
 2. Pterodactyl mounts this directory into containers (read-only)
 3. Sync script symlinks .vpk files (~52GB) and syncs other files
 4. Each server uses shared files, maintains separate configs
@@ -33,16 +33,16 @@ The centralized update script can automatically restart **all servers together**
 
 ## Prerequisites
 
-- - **KitsuneLab CS2 Egg installed in Nests**
+- - **Degrando CSGO Egg installed in Nests**
 - - **Pterodactyl Panel with [PR #4034](https://github.com/pterodactyl/panel/pull/4034/files) applied** (adds auto mount support)
 - - **Root access to node** (for cron setup and permissions)
-- - **Sufficient storage** for one complete CS2 installation
+- - **Sufficient storage** for one complete CSGO installation
 
 ## Setup Guide
 
 ### Step 1: Install Egg in Nests
 
-Before proceeding, ensure the KitsuneLab CS2 Egg is imported into your Pterodactyl Nests.
+Before proceeding, ensure the Degrando CSGO Egg is imported into your Pterodactyl Nests.
 
 ### Step 2: Apply Pterodactyl Panel Modification
 
@@ -101,14 +101,14 @@ Download the script:
 
 ```bash
 cd /root
-curl -O https://raw.githubusercontent.com/K4ryuu/CS2-Egg/refs/heads/main/misc/update-cs2-centralized.sh
-chmod +x update-cs2-centralized.sh
+curl -O https://raw.githubusercontent.com/degrando/csgo-egg/refs/heads/main/misc/update-csgo-centralized.sh
+chmod +x update-csgo-centralized.sh
 ```
 
 Edit configuration at the top of the script:
 
 ```bash
-nano update-cs2-centralized.sh
+nano update-csgo-centralized.sh
 ```
 
 **Configuration section (at the top of the file):**
@@ -118,20 +118,20 @@ nano update-cs2-centralized.sh
 # CONFIGURATION - Edit these values for your setup
 # ============================================================================
 
-# Required: CS2 App ID (don't change unless you know what you're doing)
-APP_ID="730"
+# Required: CSGO App ID (don't change unless you know what you're doing)
+APP_ID="740"
 
-# Required: Path where centralized CS2 files are stored
+# Required: Path where centralized CSGO files are stored
 # This must match the path you configured in Pterodactyl mounts
-CS2_DIR="/srv/cs2-shared"
+CSGO_DIR="/srv/csgo-shared"
 
 # Required: SteamCMD installation directory
 STEAMCMD_DIR="/root/steamcmd"
 
 # Optional: Docker image for server detection (for automatic server restart)
 # Servers using this image (any tag/branch) will be automatically restarted after update
-# Examples: "sples1/k4ryuu-cs2", "sples1/k4ryuu-cs2:latest"
-SERVER_IMAGE="sples1/k4ryuu-cs2"
+# Examples: "degrando/csgo-egg", "degrando/csgo-egg:latest"
+SERVER_IMAGE="degrando/csgo-egg"
 
 # Optional: Enable automatic server restart after update (true/false)
 # Set to "false" if you want servers to sync on next manual restart
@@ -167,61 +167,61 @@ UPDATE_CHECK_INTERVAL="600"
 
 - Script uses **Wings API** for seamless Pterodactyl integration
 - Automatically detects and restarts containers matching the specified `SERVER_IMAGE` (all tags/branches)
-- Example: `SERVER_IMAGE="sples1/k4ryuu-cs2"` restarts containers using `:latest`, `:dev`, `:staging`, etc.
+- Example: `SERVER_IMAGE="degrando/csgo-egg"` restarts containers using `:latest`, `:dev`, `:staging`, etc.
 - No manual API configuration needed - automatically reads Wings config from `/etc/pterodactyl/config.yml`
 - Detects SSL/non-SSL configuration automatically
 - Requires Wings installed on the node (standard for Pterodactyl)
 
 #### Test the Script
 
-**Full test** (downloads CS2 update):
+**Full test** (downloads CSGO update):
 
 ```bash
-./update-cs2-centralized.sh
+./update-csgo-centralized.sh
 ```
 
 **Test restart logic only** (skip SteamCMD download):
 
 ```bash
-./update-cs2-centralized.sh --simulate
+./update-csgo-centralized.sh --simulate
 ```
 
-The `--simulate` flag skips the actual CS2 update but triggers all restart logic, perfect for testing Wings API integration or validating container detection without waiting for downloads.
+The `--simulate` flag skips the actual CSGO update but triggers all restart logic, perfect for testing Wings API integration or validating container detection without waiting for downloads.
 
-**Expected output:** Pre-flight checks → SteamCMD setup → CS2 update → Summary
+**Expected output:** Pre-flight checks в†’ SteamCMD setup в†’ CSGO update в†’ Summary
 
 <details>
 <summary>Click to expand full output (no update available)</summary>
 
 ```
-──────────────────────────────────────────────────────
- KitsuneLab CS2 Centralized Update
-──────────────────────────────────────────────────────
+в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+ Degrando CSGO Centralized Update
+в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 ==> Pre-flight Checks
 
 [DONE]  Configuration validated successfully
 [DONE]  Acquired update lock
 [DONE]  Dependencies satisfied
-[INFO]  CS2 Directory: /srv/cs2-shared
+[INFO]  CSGO Directory: /srv/csgo-shared
 
 ==> SteamCMD Setup
 
 [DONE]  SteamCMD health check passed
 
-==> CS2 Update
+==> CSGO Update
 
 Checking for updates and downloading
-[DONE]  CS2 is already up to date (version: 20778640)
+[DONE]  CSGO is already up to date (version: 20778640)
 [INFO]  Installing Steam client libraries...
 [INFO]  Setting permissions...
-[INFO]  CS2 directory size: 56G
+[INFO]  CSGO directory size: 56G
 
 ==> Summary
 
-[DONE]  CS2 update completed successfully
+[DONE]  CSGO update completed successfully
 [INFO]  Version: 20778640
-[INFO]  Location: /srv/cs2-shared
+[INFO]  Location: /srv/csgo-shared
 [INFO]  Servers will sync new files on next restart
 ```
 
@@ -231,20 +231,20 @@ Checking for updates and downloading
 <summary>Click to expand full output (update available)</summary>
 
 ```
-==> CS2 Update
+==> CSGO Update
 
 Checking for updates and downloading
  Update state (0x5) downloading, progress: 45.67 (24821478192 / 54352914432)
  Update state (0x5) downloading, progress: 67.23 (36537648512 / 54352914432)
  Update state (0x5) downloading, progress: 89.41 (48592374192 / 54352914432)
-[DONE]  CS2 updated successfully: 20778640 → 20778900
+[DONE]  CSGO updated successfully: 20778640 в†’ 20778900
 [INFO]  Installing Steam client libraries...
 [INFO]  Setting permissions...
-[INFO]  CS2 directory size: 56G
+[INFO]  CSGO directory size: 56G
 
 ==> Detecting and Restarting Servers
 
-[INFO]  Found 12 container(s) using image: sples1/k4ryuu-cs2*
+[INFO]  Found 12 container(s) using image: degrando/csgo-egg*
 [INFO]  Restarting container: ptero-a1b2c3d4...
 [DONE]  Container ptero-a1b2c3d4 restarted successfully
 [INFO]  Restarting container: ptero-e5f6g7h8...
@@ -254,9 +254,9 @@ Checking for updates and downloading
 
 ==> Summary
 
-[DONE]  CS2 update completed successfully
+[DONE]  CSGO update completed successfully
 [INFO]  Version: 20778900
-[INFO]  Location: /srv/cs2-shared
+[INFO]  Location: /srv/csgo-shared
 [INFO]  Servers will sync new files on next restart
 ```
 
@@ -268,11 +268,11 @@ If SteamCMD encounters errors, the script provides contextual help:
 
 ```
 [ERROR] SteamCMD Error 0x202 - Disk space or filesystem issue
-[INFO]  • CS2 requires ~60GB for initial installation
-[INFO]  • After VPK sync, servers only use ~3-8GB each
-[INFO]  • VPK files (~52GB) shared from centralized location
+[INFO]  вЂў CSGO requires ~60GB for initial installation
+[INFO]  вЂў After VPK sync, servers only use ~3-8GB each
+[INFO]  вЂў VPK files (~52GB) shared from centralized location
 [INFO]  Solution: Free up disk space and try again
-[INFO]  Check space: df -h /srv/cs2-shared
+[INFO]  Check space: df -h /srv/csgo-shared
 ```
 
 Common error codes: 0x202 (disk space), 0x402 (network), 0x606 (invalid App ID)
@@ -289,10 +289,10 @@ Add to root crontab (runs every 2 minutes):
 sudo crontab -e  # Or just 'crontab -e' if already root
 
 # With logging (recommended for monitoring)
-*/2 * * * * /root/update-cs2-centralized.sh >> /var/log/cs2-update.log 2>&1
+*/2 * * * * /root/update-csgo-centralized.sh >> /var/log/csgo-update.log 2>&1
 
 # Without logging (silent)
-*/2 * * * * /root/update-cs2-centralized.sh >/dev/null 2>&1
+*/2 * * * * /root/update-csgo-centralized.sh >/dev/null 2>&1
 ```
 
 **Why frequent checks?** SteamCMD only downloads when updates exist. No update = quick check (~1 second).
@@ -300,8 +300,8 @@ sudo crontab -e  # Or just 'crontab -e' if already root
 #### Monitor Updates
 
 ```bash
-tail -f /var/log/cs2-update.log  # Real-time
-grep "DONE.*updated successfully" /var/log/cs2-update.log  # Check updates
+tail -f /var/log/csgo-update.log  # Real-time
+grep "DONE.*updated successfully" /var/log/csgo-update.log  # Check updates
 ```
 
 ### Step 4: Configure Pterodactyl System
@@ -310,7 +310,7 @@ Edit `/etc/pterodactyl/config.yml` and add mount path to allowed list:
 
 ```yaml
 allowed_mounts:
-  - /srv/cs2-shared
+  - /srv/csgo-shared
 ```
 
 Restart Wings:
@@ -321,26 +321,26 @@ systemctl restart wings
 
 ### Step 5: Create Mount in Admin Panel
 
-Navigate to: **Admin Panel** → **Mounts** → **Create New**
+Navigate to: **Admin Panel** в†’ **Mounts** в†’ **Create New**
 
 **Mount Configuration:**
 
-- **Name**: CS2 Shared Files
-- **Source**: `/srv/cs2-shared` (external path on node)
+- **Name**: CSGO Shared Files
+- **Source**: `/srv/csgo-shared` (external path on node)
 - **Target**: `/tmp/cs2_ds` (internal path in container)
 - **Read Only**: **ON** (prevents servers from modifying shared files)
 - **Auto Mount**: **ON** (mounts automatically for assigned servers)
-- **Mount on Install**: **OFF** (k4ryuu egg has no intall part, and might result in unmounting after install, which we dont want)
+- **Mount on Install**: **OFF** (Greyweb egg has no intall part, and might result in unmounting after install, which we dont want)
 - **User Mountable**: We can block the users from changing this mount, so leave it **OFF**
 
 **Assign to Nodes and Eggs:**
 
 After saving, you'll see **Eggs** and **Nodes** panels on the right side:
 
-- Click **Add Eggs** → Select **KitsuneLab CS2 Egg**
-- Click **Add Nodes** → Select all nodes where you want VPK sync enabled
+- Click **Add Eggs** в†’ Select **Degrando CSGO Egg**
+- Click **Add Nodes** в†’ Select all nodes where you want VPK sync enabled
 
-> **Important:** Only servers on assigned nodes with assigned eggs will have this mount available. Make sure to add all relevant nodes where CS2 servers will run.
+> **Important:** Only servers on assigned nodes with assigned eggs will have this mount available. Make sure to add all relevant nodes where CSGO servers will run.
 
 Save the mount.
 
@@ -348,7 +348,7 @@ Save the mount.
 
 **This is critical** - setting at egg level ensures ALL new servers inherit the configuration.
 
-Navigate to: **Admin Panel** → **Nests** → **Your Nest** → **Eggs** → **KitsuneLab CS2**
+Navigate to: **Admin Panel** в†’ **Nests** в†’ **Your Nest** в†’ **Eggs** в†’ **Degrando CSGO**
 
 Go to **Variables** tab and find **VPK Sync**:
 
@@ -378,27 +378,27 @@ Console output on successful sync:
 
 ```
 [RUNNING] Syncing VPK files...
-[KitsuneLab] > VPK sync complete — linked 625 file(s), total VPK size 54.46 GB (approx. per-server saving)
+[Degrando] > VPK sync complete вЂ” linked 625 file(s), total VPK size 54.46 GB (approx. per-server saving)
 ```
 
 ## Maintenance
 
 ### Updates
 
-**Automatic:** Cron job handles everything. When CS2 updates:
+**Automatic:** Cron job handles everything. When CSGO updates:
 
-1. Cron detects update and downloads to `/srv/cs2-shared`
+1. Cron detects update and downloads to `/srv/csgo-shared`
 2. Servers automatically sync new files on next restart (no reinstall needed)
 3. No manual intervention needed
 
 **Manual trigger** (if needed, on the server node):
 
 ```bash
-# Full update with CS2 download
-/root/update-cs2-centralized.sh
+# Full update with CSGO download
+/root/update-csgo-centralized.sh
 
 # Test restart logic only (skip download)
-/root/update-cs2-centralized.sh --simulate
+/root/update-csgo-centralized.sh --simulate
 ```
 
 ## Troubleshooting
@@ -443,8 +443,8 @@ Console output on successful sync:
 
 1. **Check Mount Assignment (Admin Panel):**
 
-   - Go to **Admin** → **Mounts** → **CS2 Shared Files**
-   - Verify **Eggs** panel includes **KitsuneLab CS2 Egg**
+   - Go to **Admin** в†’ **Mounts** в†’ **CSGO Shared Files**
+   - Verify **Eggs** panel includes **Degrando CSGO Egg**
    - Verify **Nodes** panel includes the node where your server runs
    - If missing, click **Add Eggs** or **Add Nodes** and select appropriately
 
@@ -454,7 +454,7 @@ Console output on successful sync:
 
 3. **Apply to Servers:**
 
-   - Go to server → **Mounts** tab
+   - Go to server в†’ **Mounts** tab
    - Click the **green plus (+)** icon next to the mount
    - Restart server
 
@@ -473,10 +473,10 @@ Servers created before the VPK sync mount was configured don't automatically rec
 
 **Fix:**
 
-1. **Verify mount exists:** **Admin** → **Mounts** → Check CS2 Shared Files mount
+1. **Verify mount exists:** **Admin** в†’ **Mounts** в†’ Check CSGO Shared Files mount
 2. **Check mount assignment:** Mount must be assigned to both egg and node
-3. **Apply mount to server:** Go to server → **Mounts** tab → Click green (+) icon
-4. **Verify path exists:** `/srv/cs2-shared` must exist on node
+3. **Apply mount to server:** Go to server в†’ **Mounts** tab в†’ Click green (+) icon
+4. **Verify path exists:** `/srv/csgo-shared` must exist on node
 5. **Restart server** to activate VPK sync
 
 ### Permission Denied
@@ -488,8 +488,8 @@ Servers created before the VPK sync mount was configured don't automatically rec
 **Manual fix (if needed immediately):**
 
 ```bash
-chown -R pterodactyl:pterodactyl /srv/cs2-shared
-chmod -R 755 /srv/cs2-shared
+chown -R pterodactyl:pterodactyl /srv/csgo-shared
+chmod -R 755 /srv/csgo-shared
 ```
 
 ### Cron Job Not Running
@@ -497,7 +497,7 @@ chmod -R 755 /srv/cs2-shared
 ```bash
 systemctl status cron  # Check service
 crontab -l  # Verify entry
-/root/update-cs2-centralized.sh  # Test manually
+/root/update-csgo-centralized.sh  # Test manually
 ```
 
 ## Storage Savings
@@ -510,7 +510,7 @@ crontab -l  # Verify entry
 | 20      | 1.1TB        | 115GB     | 1025GB (86%) |
 | 50      | 2.75TB       | 205GB     | 2.6TB (87%)  |
 
-**Per server:** ~55GB → ~3GB (~52GB VPK files shared)
+**Per server:** ~55GB в†’ ~3GB (~52GB VPK files shared)
 
 ## FAQ
 
@@ -524,13 +524,13 @@ A: Servers continue using existing files. Update manually if needed.
 A: Every 1-2 minutes is safe - SteamCMD only downloads when updates exist.
 
 **Q: Why does my server show "Unmounted" in the Mounts tab?**
-A: Most common for servers created before VPK sync. **Quick fix:** Go to server → **Mounts** tab → Click the **green plus (+)** icon next to the mount → Restart server. The mount will stay permanently mounted. See [Mount Shows "Unmounted" Status](#mount-shows-unmounted-status) for detailed fix.
+A: Most common for servers created before VPK sync. **Quick fix:** Go to server в†’ **Mounts** tab в†’ Click the **green plus (+)** icon next to the mount в†’ Restart server. The mount will stay permanently mounted. See [Mount Shows "Unmounted" Status](#mount-shows-unmounted-status) for detailed fix.
 
 **Q: Do I need to reinstall servers to enable VPK sync?**
 A: No! Just configure the mount, assign it to the egg/node, and restart the server. VPK sync activates immediately.
 
-**Q: How do I test auto-restart without downloading CS2 updates?**
-A: Use the `--simulate` flag: `/root/update-cs2-centralized.sh --simulate`. This skips the SteamCMD download but triggers all restart logic (Wings API detection, container detection, restart execution). Perfect for testing configuration changes or Wings API integration.
+**Q: How do I test auto-restart without downloading CSGO updates?**
+A: Use the `--simulate` flag: `/root/update-csgo-centralized.sh --simulate`. This skips the SteamCMD download but triggers all restart logic (Wings API detection, container detection, restart execution). Perfect for testing configuration changes or Wings API integration.
 
 ## Related Documentation
 
@@ -542,5 +542,5 @@ A: Use the `--simulate` flag: `/root/update-cs2-centralized.sh --simulate`. This
 
 Need help with VPK sync?
 
-- [Report Issue](https://github.com/K4ryuu/CS2-Egg/issues)
-- [View Update Script](https://github.com/K4ryuu/CS2-Egg/blob/main/misc/update-cs2-centralized.sh)
+- [Report Issue](https://github.com/degrando/csgo-egg/issues)
+- [View Update Script](https://github.com/degrando/csgo-egg/blob/main/misc/update-csgo-centralized.sh)

@@ -1,5 +1,5 @@
 #!/bin/bash
-# KitsuneLab CS2 Docker Image Builder
+# Degrando CSGO Docker Image Builder
 
 set -euo pipefail
 
@@ -28,7 +28,7 @@ headline()    {
 }
 
 usage() {
-    echo -e "${BOLD}KitsuneLab CS2 Docker Image Builder${RESET}"
+    echo -e "${BOLD}Degrando CSGO Docker Image Builder${RESET}"
     echo -e ""
     echo -e "${BOLD}Usage:${RESET}"
     echo -e "    ./build.sh [TAG] [options]"
@@ -94,19 +94,19 @@ if [[ -n "$POSITIONAL_TAG" ]]; then
 fi
 
 # Docker Hub configuration
-DOCKERHUB_IMAGE="sples1/k4ryuu-cs2"
+DOCKERHUB_IMAGE="degrando/csgo-egg"
 DOCKERHUB_FULL="${DOCKERHUB_IMAGE}:${TAG}"
 
 # GitHub Container Registry configuration
 # Note: GHCR requires lowercase repository names
-GITHUB_REPO="k4ryuu/cs2-egg"
+GITHUB_REPO="degrando/csgo-egg"
 GHCR_IMAGE="ghcr.io/${GITHUB_REPO}"
 GHCR_FULL="${GHCR_IMAGE}:${TAG}"
 
 # Primary build target (Docker Hub image)
 FULL_IMAGE="${DOCKERHUB_FULL}"
 
-headline "KitsuneLab CS2 Docker Image Builder" "Image: ${BOLD}${FULL_IMAGE}${RESET}"
+headline "Degrando CSGO Docker Image Builder" "Image: ${BOLD}${FULL_IMAGE}${RESET}"
 
 # ---------------------------------------------
 # Pre-flight checks
@@ -209,7 +209,7 @@ run_with_spinner() {
     BUILD_LAST_LOG="$log_file"
 }
 
-run_with_spinner "Building ${FULL_IMAGE}" docker build -f KitsuneLab-Dockerfile -t "${FULL_IMAGE}" .
+run_with_spinner "Building ${FULL_IMAGE}" docker build -f Degrando-Dockerfile -t "${FULL_IMAGE}" .
 if [[ -f "$BUILD_LAST_LOG" ]]; then
     size=$(docker image inspect "$FULL_IMAGE" -f '{{.Size}}' 2>/dev/null || echo 0)
     if [[ "$size" =~ ^[0-9]+$ ]] && [ "$size" -gt 0 ]; then

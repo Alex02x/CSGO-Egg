@@ -1,4 +1,4 @@
-# Updating
+﻿# Updating
 
 This guide covers how to update your egg, Docker image, and server.
 
@@ -9,8 +9,8 @@ When a new version of the egg is released:
 ### For Administrators
 
 1. Download the latest egg JSON from GitHub
-2. Go to **Admin** → **Nests** → Your Nest → **Eggs**
-3. Click on the KitsuneLab CS2 Egg
+2. Go to **Admin** в†’ **Nests** в†’ Your Nest в†’ **Eggs**
+3. Click on the Degrando CSGO Egg
 4. Either:
    - **Option A**: Click **Import Egg** and upload the new JSON
      - **Warning**: This resets ALL variables to default values
@@ -51,8 +51,8 @@ Docker images are automatically pulled when specified in the egg. To use a newer
 1. Stop your server
 2. Go to **Startup** tab
 3. Change the **Docker Image** dropdown or field to:
-   - `docker.io/sples1/k4ryuu-cs2:latest` for the latest stable
-   - `docker.io/sples1/k4ryuu-cs2:beta` for beta
+   - `docker.io/degrando/csgo-egg:latest` for the latest stable
+   - `docker.io/degrando/csgo-egg:beta` for beta
 4. Start your server
 
 The new image will be automatically pulled on startup.
@@ -66,7 +66,7 @@ The new image will be automatically pulled on startup.
 
 The egg includes several auto-update features:
 
-### CS2 Server Updates
+### CSGO Server Updates
 
 The server automatically updates on startup by default. To disable:
 
@@ -82,9 +82,9 @@ The server automatically updates on startup by default. To disable:
 | Variable           | Framework          | Auto-Updates |
 | ------------------ | ------------------ | ------------ |
 | `INSTALL_METAMOD`  | MetaMod:Source     | -           |
-| `INSTALL_CSS`      | CounterStrikeSharp | -           |
-| `INSTALL_SWIFTLY`  | SwiftlyS2          | -           |
-| `INSTALL_MODSHARP` | ModSharp           | -           |
+| `INSTALL_SOURCEMOD`      | SourceMod | -           |
+| `INSTALL_SWIFTLY`  | SourceMod          | -           |
+| `INSTALL_SourceMod` | SourceMod           | -           |
 
 **Configuration:**
 
@@ -95,24 +95,24 @@ The server automatically updates on startup by default. To disable:
 
 **Dependencies:**
 
-- CounterStrikeSharp automatically enables MetaMod (required dependency)
-- SwiftlyS2 and ModSharp are standalone (no MetaMod required)
+- SourceMod automatically enables MetaMod (required dependency)
+- SourceMod and SourceMod are standalone (no MetaMod required)
 
 See [Auto-Updaters Documentation](../features/auto-updaters.md) for full details.
 
 ## Update Notifications
 
-### Auto-Restart on CS2 Updates
+### Auto-Restart on CSGO Updates
 
-The egg can automatically restart your server when a new CS2 update is detected.
+The egg can automatically restart your server when a new CSGO update is detected.
 
 See the [VPK Sync & Centralized Updates Guide](../features/vpk-sync.md) for automatic updates and server restarts.
 
-> ****TIP** Tip for Multiple Servers:** If you run multiple CS2 servers, use [VPK Sync](../features/vpk-sync.md) with the centralized update script instead. It downloads once and restarts all servers together, saving bandwidth and time compared to per-server auto-restart.
+> ****TIP** Tip for Multiple Servers:** If you run multiple CSGO servers, use [VPK Sync](../features/vpk-sync.md) with the centralized update script instead. It downloads once and restarts all servers together, saving bandwidth and time compared to per-server auto-restart.
 
 ## Checking Versions
 
-### Current CS2 Version
+### Current CSGO Version
 
 The server logs show the current BuildID on startup:
 
@@ -126,9 +126,9 @@ Version information is stored in `/home/container/egg/versions.txt`:
 
 ```
 Metamod=2.x-dev1245
-CSS=v1.1.0
+SourceMod=v1.1.0
 Swiftly=v0.2.38
-ModSharp=git70
+SourceMod=git70
 DotNet=9.0.0
 ```
 
@@ -155,12 +155,12 @@ If an update causes issues:
 3. Change Docker Image to a previous tag (if you know it)
 4. Start the server
 
-### CS2 Server Rollback
+### CSGO Server Rollback
 
-CS2 server rollback is not currently supported by this egg. For version-specific deployments, consider using Docker image tags:
+CSGO server rollback is not currently supported by this egg. For version-specific deployments, consider using Docker image tags:
 
-- `docker.io/sples1/k4ryuu-cs2:latest` - Latest stable
-- `docker.io/sples1/k4ryuu-cs2:beta` - Beta
+- `docker.io/degrando/csgo-egg:latest` - Latest stable
+- `docker.io/degrando/csgo-egg:beta` - Beta
 
 Manual rollback requires direct SteamCMD usage outside the egg's automated update system.
 
@@ -173,7 +173,7 @@ Manual rollback requires direct SteamCMD usage outside the egg's automated updat
 5. **Document your custom variables** before egg imports (VPK Sync, tokens, etc.)
 6. **Keep the egg updated** to get new features and fixes
 7. **Use stable images** for production servers
-8. **Enable auto-restart** to minimize downtime during CS2 updates
+8. **Enable auto-restart** to minimize downtime during CSGO updates
 
 ## Changelog
 
@@ -183,5 +183,5 @@ View the full changelog: [CHANGELOG](../../CHANGELOG)
 
 Having issues with updates?
 
-- [Report a Bug](https://github.com/K4ryuu/CS2-Egg/issues/new?template=bug_report.md)
+- [Report a Bug](https://github.com/degrando/csgo-egg/issues/new?template=bug_report.md)
 - [Check Troubleshooting](../advanced/troubleshooting.md)

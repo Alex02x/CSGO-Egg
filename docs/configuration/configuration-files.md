@@ -1,6 +1,6 @@
-# Configuration Files
+﻿# Configuration Files
 
-The KitsuneLab CS2 Egg uses JSON configuration files for easy, persistent customization.
+The Degrando CSGO Egg uses JSON configuration files for easy, persistent customization.
 
 ## Location
 
@@ -79,7 +79,7 @@ Files are automatically created on first startup with default values and detaile
   },
   "paths": {
     "game_directory": "./game/csgo",
-    "accelerator_dumps": "./game/csgo/addons/AcceleratorCS2/dumps"
+    "accelerator_dumps": "./csgo/addons/AcceleratorCS2/dumps"
   }
 }
 ```
@@ -89,7 +89,7 @@ Files are automatically created on first startup with default values and detaile
 - `intervals` - Hours to keep files
   - `backup_rounds_hours` - Round backups (default: 24h)
   - `demos_hours` - Demo files (default: 168h = 7 days)
-  - `css_logs_hours` - CounterStrikeSharp logs (default: 72h = 3 days)
+  - `css_logs_hours` - SourceMod logs (default: 72h = 3 days)
   - `accelerator_dumps_hours` - Crash dumps (default: 168h = 7 days)
 
 Cleanup runs every hour automatically.
@@ -138,11 +138,11 @@ These variables are not visible in the Pterodactyl panel UI but can be configure
 
 **Purpose:** Customize the log prefix text
 
-**Default:** `KitsuneLab`
+**Default:** `Degrando`
 
 **How to Change:**
 
-1. In Pterodactyl, go to **Admin → Nests → KitsuneLab CS2 Egg**
+1. In Pterodactyl, go to **Admin в†’ Nests в†’ Degrando CSGO Egg**
 2. Edit the egg JSON
 3. Find the `PREFIX_TEXT` variable
 4. Update the `default_value` field:
@@ -160,7 +160,7 @@ These variables are not visible in the Pterodactyl panel UI but can be configure
 
 **Example Output:**
 
-- Default: `[KitsuneLab] > Server starting...`
+- Default: `[Degrando] > Server starting...`
 - Custom: `[MyServerName] > Server starting...`
 
 **Note:** The colors and formatting remain the same, only the text inside `[ ]` changes.
@@ -209,7 +209,7 @@ When your server runs with a GSLT token and the IP address changes, Steam automa
 
 **Method 2: All Servers (Egg Default)**
 
-1. In Pterodactyl, go to **Admin → Nests → KitsuneLab CS2 Egg**
+1. In Pterodactyl, go to **Admin в†’ Nests в†’ Degrando CSGO Egg**
 2. Click **Variables** tab
 3. Find `ALLOW_TOKENLESS` variable
 4. Change `Default Value` from `0` to `1`
@@ -266,7 +266,7 @@ In Pterodactyl egg variables, set to `1`:
 - `ENABLE_FILTER` - Console filter
 - `CLEANUP_ENABLED` - Junk cleaner
 
-**Note:** For automatic CS2 updates and server restarts, see the [VPK Sync & Centralized Updates](../features/vpk-sync.md) guide.
+**Note:** For automatic CSGO updates and server restarts, see the [VPK Sync & Centralized Updates](../features/vpk-sync.md) guide.
 
 ### Step 2: Configure Details
 
@@ -396,5 +396,5 @@ tar -xzf egg-backup.tar.gz
 
 Need help with configuration?
 
-- [GitHub Issues](https://github.com/K4ryuu/CS2-Egg/issues)
-- [GitHub Discussions](https://github.com/K4ryuu/CS2-Egg/discussions)
+- [GitHub Issues](https://github.com/degrando/csgo-egg/issues)
+- [GitHub Discussions](https://github.com/degrando/csgo-egg/discussions)

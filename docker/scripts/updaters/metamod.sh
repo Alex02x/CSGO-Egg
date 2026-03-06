@@ -1,24 +1,24 @@
 #!/bin/bash
 # MetaMod Auto-Update Script
-# Downloads and installs MetaMod from AlliedMods
+# Downloads and installs MetaMod 1.x from AlliedMods for CSGO
 
 source /utils/logging.sh
 source /utils/updater_common.sh
 
 update_metamod() {
-    local OUTPUT_DIR="./game/csgo/addons"
+    local OUTPUT_DIR="./csgo/addons"
 
     if [ ! -d "$OUTPUT_DIR/metamod" ]; then
         log_message "Installing Metamod..." "info"
     fi
 
-    local metamod_version=$(curl -sL https://mms.alliedmods.net/mmsdrop/2.0/ | grep -o 'href="mmsource-[^"]*-linux\.tar\.gz' | sed 's/href="//' | tail -1)
+    local metamod_version=$(curl -sL https://mms.alliedmods.net/mmsdrop/1.11/ | grep -o 'href="mmsource-[^"]*-linux\.tar\.gz' | sed 's/href="//' | tail -1)
     if [ -z "$metamod_version" ]; then
         log_message "Failed to fetch the Metamod version" "error"
         return 1
     fi
 
-    local full_url="https://mms.alliedmods.net/mmsdrop/2.0/$metamod_version"
+    local full_url="https://mms.alliedmods.net/mmsdrop/1.11/$metamod_version"
     local new_version=$(echo "$metamod_version" | grep -o 'git[0-9]\+')
     local current_version=$(get_current_version "Metamod")
 

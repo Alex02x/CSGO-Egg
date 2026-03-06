@@ -3,15 +3,13 @@ source /utils/logging.sh
 source /utils/updater_common.sh
 
 # Directories
-GAME_DIRECTORY="./game/csgo"
-OUTPUT_DIR="./game/csgo/addons"
+GAME_DIRECTORY="./csgo"
+OUTPUT_DIR="./csgo/addons"
 TEMP_DIR="./temps"
 
 # Source modular updaters
 source /scripts/updaters/metamod.sh
-source /scripts/updaters/counterstrikesharp.sh
-source /scripts/updaters/swiftlys2.sh
-source /scripts/updaters/modsharp.sh
+source /scripts/updaters/sourcemod.sh
 
 # Backwards compatibility: Map old ADDON_SELECTION to new boolean variables
 migrate_addon_selection() {
@@ -20,15 +18,9 @@ migrate_addon_selection() {
             "Metamod Only")
                 INSTALL_METAMOD=1
                 ;;
-            "Metamod + CounterStrikeSharp")
+            "Metamod + SourceMod")
                 INSTALL_METAMOD=1
-                INSTALL_CSS=1
-                ;;
-            "SwiftlyS2")
-                INSTALL_SWIFTLY=1
-                ;;
-            "ModSharp")
-                INSTALL_MODSHARP=1
+                INSTALL_SOURCEMOD=1
                 ;;
         esac
     fi
@@ -46,26 +38,10 @@ update_addons() {
     # Backwards compatibility migration
     migrate_addon_selection
 
-    # Dependency check: CSS requires MetaMod
-    if [ "${INSTALL_CSS:-0}" -eq 1 ] && [ "${INSTALL_METAMOD:-0}" -ne 1 ]; then
-        log_message "CounterStrikeSharp requires MetaMod:Source, auto-enabling..." "warning"
+    # Dependency check: SourceMod requires MetaMod
+    if [ "${INSTALL_SOURCEMOD:-0}" -eq 1 ] && [ "${INSTALL_METAMOD:-0}" -ne 1 ]; then
+        log_message "SourceMod requires MetaMod:Source, auto-enabling..." "warning"
         INSTALL_METAMOD=1
-    fi
-
-    # Consolidated ModSharp incompatibility check
-    modsharp_is_present=false
-    if [ "${INSTALL_MODSHARP:-0}" -eq 1 ] || grep -q "Game[[:space:]]*sharp" "/home/container/game/csgo/gameinfo.gi" 2>/dev/null; then
-        modsharp_is_present=true
-    fi
-
-    if [ "$modsharp_is_present" = true ]; then
-        if [ "${INSTALL_CSS:-0}" -eq 1 ]; then
-            log_message "ModSharp is present alongside CounterStrikeSharp. These addons may be incompatible and may cause conflicts. It is recommended to use only one of them." "warning"
-        fi
-
-        if [ "${INSTALL_SWIFTLY:-0}" -eq 1 ]; then
-            log_message "ModSharp is present alongside SwiftlyS2. These addons may be incompatible and may cause conflicts. It is recommended to use only one of them." "warning"
-        fi
     fi
 
     # MetaMod:Source
@@ -76,55 +52,21 @@ update_addons() {
             log_message "update_metamod function not available" "error"
         fi
 
-        # Configure metamod in gameinfo.gi
+        # Configure metamod in gameinfo.txt
         add_to_gameinfo "csgo/addons/metamod"
     fi
 
-    # CounterStrikeSharp
-    if [ "${INSTALL_CSS:-0}" -eq 1 ]; then
-        if type update_counterstrikesharp &>/dev/null; then
-            update_counterstrikesharp
+    # SourceMod
+    if [ "${INSTALL_SOURCEMOD:-0}" -eq 1 ]; then
+        if type update_sourcemod &>/dev/null; then
+            update_sourcemod
         else
-            log_message "update_counterstrikesharp function not available" "error"
+            log_message "update_sourcemod function not available" "error"
         fi
-    fi
-
-    # SwiftlyS2 (standalone)
-    if [ "${INSTALL_SWIFTLY:-0}" -eq 1 ]; then
-        if type update_swiftly &>/dev/null; then
-            update_swiftly
-        else
-            log_message "update_swiftly function not available" "error"
-        fi
-
-        # Configure swiftlys2 in gameinfo.gi
-        add_to_gameinfo "csgo/addons/swiftlys2"
-
-        # Remove old metamod VDF file if present
-        local OLD_VDF="/home/container/game/csgo/addons/metamod/swiftlys2.vdf"
-        if [ -f "$OLD_VDF" ]; then
-            rm -f "$OLD_VDF"
-            log_message "Removed old swiftlys2.vdf from metamod" "debug"
-        fi
-    fi
-
-    # ModSharp (standalone)
-    if [ "${INSTALL_MODSHARP:-0}" -eq 1 ]; then
-        if [ -f "/scripts/updaters/modsharp.sh" ]; then
-            bash /scripts/updaters/modsharp.sh
-        else
-            log_message "ModSharp updater script not found" "error"
-        fi
-
-        # Configure modsharp in gameinfo.gi
-        add_to_gameinfo "sharp"
     fi
 
     # Ensure MetaMod is always first addon after LowViolence (if present)
     ensure_metamod_first
-
-    # Patch RequireLoginForDedicatedServers setting based on ALLOW_TOKENLESS
-    patch_tokenless_setting
 
     # Clean up
     rm -rf "$TEMP_DIR"

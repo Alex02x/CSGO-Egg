@@ -1,6 +1,6 @@
-# KitsuneLab CS2 Egg Documentation
+﻿# Degrando CSGO Egg Documentation
 
-Welcome to the official documentation for the KitsuneLab CS2 Pterodactyl Egg! This comprehensive guide will help you install, configure, and use all features.
+Welcome to the documentation for the Degrando CSGO Pterodactyl Egg! This guide covers installation, configuration, and all features.
 
 ## Quick Start
 
@@ -24,9 +24,9 @@ New to this egg? Start here:
 
 ### Features
 
-- [VPK Sync & Centralized Updates](features/vpk-sync.md) - 80% storage savings + automatic CS2 updates
+- [VPK Sync & Centralized Updates](features/vpk-sync.md) - 80% storage savings + automatic CSGO updates
 
-- [Auto-Updaters](features/auto-updaters.md) - Multi-framework support with independent toggles
+- [Auto-Updaters](features/auto-updaters.md) - MetaMod and SourceMod support with independent toggles
 
 ### Configuration
 
@@ -36,7 +36,7 @@ New to this egg? Start here:
 
 - [Building from Source](advanced/building.md) - Build your own Docker image
 
-- [GDB Debugging](advanced/debugging.md) - Remote debugging with GDB and IDA Pro
+- [GDB Debugging](advanced/debugging.md) - Remote debugging with GDB
 
 - [Troubleshooting](advanced/troubleshooting.md) - Common issues and solutions
 
@@ -44,11 +44,11 @@ New to this egg? Start here:
 
 This egg includes many powerful features:
 
-- **Auto-Restart** - Detect CS2 updates and restart automatically
+- **Auto-Restart** - Detect CSGO updates and restart automatically
 
-- **Auto-Updaters** - Keep MetaMod, CounterStrikeSharp, Swiftly, and ModSharp updated
+- **Auto-Updaters** - Keep MetaMod and SourceMod updated
 
-- **VPK Sync** - Save ~52GB per server with centralized files
+- **VPK Sync** - Save storage per server with centralized files
 
 - **Junk Cleaner** - Automatic cleanup configured via JSON
 
@@ -56,7 +56,7 @@ This egg includes many powerful features:
 
 - **Console Filter** - Pattern-based message filtering
 
-- **Tokenless Servers** - Run servers without GSLT token requirement
+- **Tokenless Servers** - Run servers without GSLT token via `-insecure`
 
 - **Flexible** - Works with Pterodactyl or standalone Docker
 
@@ -64,7 +64,7 @@ This egg includes many powerful features:
 
 ### Install a New Server
 
-1. [Download the egg](https://github.com/K4ryuu/CS2-Egg/blob/main/pterodactyl/kitsunelab-cs2-egg.json)
+1. Download the egg from `pterodactyl/degrando-csgo-egg.json`
 
 2. Import into Pterodactyl
 
@@ -72,40 +72,28 @@ This egg includes many powerful features:
 
 4. Start and enjoy!
 
-[Full Installation Guide →](getting-started/installation.md)
+[Full Installation Guide в†’](getting-started/installation.md)
 
 ### Enable Auto-Restart
 
-1. Set up VPK Sync for centralized CS2 files
+1. Set up VPK Sync for centralized CSGO files
 
 2. Configure the centralized update script
 
 3. Add to cron for automatic checks
 
-4. Servers restart automatically on CS2 updates!
+4. Servers restart automatically on CSGO updates!
 
-[VPK Sync & Centralized Updates Guide →](features/vpk-sync.md)
+[VPK Sync & Centralized Updates Guide в†’](features/vpk-sync.md)
 
 ### Build Custom Image
 
 ```bash
-git clone https://github.com/K4ryuu/CS2-Egg.git
-cd CS2-Egg
 ./build.sh my-tag
-docker push your-registry/your-image:my-tag
+docker push degrando/csgo-egg:my-tag
 ```
 
-[Building Guide →](advanced/building.md)
-
-## Quick Links
-
-- **[Download Egg](https://github.com/K4ryuu/CS2-Egg/blob/main/pterodactyl/kitsunelab-cs2-egg.json)**
-
-- **[Report Bug](https://github.com/K4ryuu/CS2-Egg/issues/new?assignees=KitsuneLab-Development&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D)**
-
-- **[Request Feature](https://github.com/K4ryuu/CS2-Egg/issues/new?assignees=KitsuneLab-Development&labels=enhancement&projects=&template=feature_request.md&title=%5BREQ%5D)**
-
-- **[View Changelog](../CHANGELOG)**
+[Building Guide в†’](advanced/building.md)
 
 ## Need Help?
 
@@ -113,23 +101,7 @@ If you need assistance:
 
 1. Check the [Troubleshooting Guide](advanced/troubleshooting.md)
 
-2. Search existing [GitHub Issues](https://github.com/K4ryuu/CS2-Egg/issues)
-
-3. Ask in [GitHub Discussions](https://github.com/K4ryuu/CS2-Egg/discussions)
-
-4. Create a [new issue](https://github.com/K4ryuu/CS2-Egg/issues/new) if needed
-
-## Contributing
-
-Want to help improve this project?
-
-- Report bugs and suggest features
-
-- Improve documentation
-
-- Submit pull requests
-
-- Share your experience
+2. Review the [Configuration Files](configuration/configuration-files.md) documentation
 
 ## License
 
@@ -137,17 +109,19 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE.md](../LIC
 
 ## Credits
 
+- **[K4ryuu](https://github.com/K4ryuu)** - Original [CS2-Egg](https://github.com/K4ryuu/CS2-Egg) this project is based on
+
 - **[1zc](https://github.com/1zc)** - Original [CS2-Pterodactyl](https://github.com/1zc/CS2-Pterodactyl) base image
 
 - **[Poggu](https://github.com/Poggicek)** - Console filter inspiration from [CleanerCS2](https://github.com/Source2ZE/CleanerCS2)
 
-- All [contributors](https://github.com/K4ryuu/CS2-Egg/graphs/contributors) who help improve this project
+Made with care by Greyweb @ degrando
 
 ---
 
 <div align="center">
-  <p>Made with ♥ by <a href="https://github.com/K4ryuu">K4ryuu</a> @ <a href="https://kitsune-lab.com">KitsuneLab</a></p>
+  <p>Made with в™Ґ by <a href="https://github.com/Greyweb">Greyweb</a> @ <a href="https://kitsune-lab.com">Degrando</a></p>
   <p>
-    <a href="https://github.com/K4ryuu/CS2-Egg">⭐ Star on GitHub</a>
+    <a href="https://github.com/degrando/csgo-egg">в­ђ Star on GitHub</a>
   </p>
 </div>

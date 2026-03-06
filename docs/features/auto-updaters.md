@@ -1,15 +1,15 @@
-# Auto-Updaters
+﻿# Auto-Updaters
 
-Automatically update MetaMod, CounterStrikeSharp, SwiftlyS2, and ModSharp on server startup with independent control per framework.
+Automatically update MetaMod, SourceMod, SourceMod, and SourceMod on server startup with independent control per framework.
 
 ## Overview
 
-The egg includes automatic updaters for popular CS2 server plugins with **multi-framework support** → enable multiple frameworks simultaneously:
+The egg includes automatic updaters for popular CSGO server plugins with **multi-framework support** в†’ enable multiple frameworks simultaneously:
 
-- **MetaMod:Source** → Core plugin framework (required for CSS)
-- **CounterStrikeSharp (CSS)** → C# plugin framework (.NET 8)
-- **SwiftlyS2** → Standalone C# framework v2 (no MetaMod required)
-- **ModSharp** → Standalone C# platform with .NET 9 runtime
+- **MetaMod:Source** в†’ Core plugin framework (required for SourceMod)
+- **SourceMod (SourceMod)** в†’ C# plugin framework (.NET 8)
+- **SourceMod** в†’ Standalone C# framework v2 (no MetaMod required)
+- **SourceMod** в†’ Standalone C# platform with .NET 9 runtime
 
 Updates happen automatically on server startup, keeping your plugins current without manual intervention.
 
@@ -23,17 +23,17 @@ Each framework has an independent boolean toggle in the Pterodactyl panel:
 
 | Variable             | Description                                      | Auto-Updates |
 | -------------------- | ------------------------------------------------ | ------------ |
-| `INSTALL_METAMOD`    | MetaMod:Source (required for CSS)                | [✓]           |
-| `INSTALL_CSS`        | CounterStrikeSharp (auto-enables MetaMod)        | [✓]           |
-| `INSTALL_SWIFTLY`    | SwiftlyS2 standalone (no MetaMod required)       | [✓]           |
-| `INSTALL_MODSHARP`   | ModSharp standalone with .NET 9                  | [✓]           |
+| `INSTALL_METAMOD`    | MetaMod:Source (required for SourceMod)                | [вњ“]           |
+| `INSTALL_SOURCEMOD`        | SourceMod (auto-enables MetaMod)        | [вњ“]           |
+| `INSTALL_SWIFTLY`    | SourceMod standalone (no MetaMod required)       | [вњ“]           |
+| `INSTALL_SourceMod`   | SourceMod standalone with .NET 9                  | [вњ“]           |
 
 **Multi-Framework Examples:**
-- MetaMod + CSS + SwiftlyS2 → All three enabled simultaneously [✓]
-- MetaMod + ModSharp → Compatible combination [✓]
-- CSS only → MetaMod auto-enabled as dependency [✓]
-- ModSharp + CSS → ModSharp auto-disabled (incompatible) [✗]
-- ModSharp + SwiftlyS2 → ModSharp auto-disabled (incompatible) [✗]
+- MetaMod + SourceMod + SourceMod в†’ All three enabled simultaneously [вњ“]
+- MetaMod + SourceMod в†’ Compatible combination [вњ“]
+- SourceMod only в†’ MetaMod auto-enabled as dependency [вњ“]
+- SourceMod + SourceMod в†’ SourceMod auto-disabled (incompatible) [вњ—]
+- SourceMod + SourceMod в†’ SourceMod auto-disabled (incompatible) [вњ—]
 
 ### Setting Up
 
@@ -41,19 +41,19 @@ Each framework has an independent boolean toggle in the Pterodactyl panel:
 
 1. Go to **Startup** tab
 2. Toggle checkboxes for desired frameworks:
-   - ☑ MetaMod:Source
-   - ☑ CounterStrikeSharp
-   - ☐ SwiftlyS2
-   - ☑ ModSharp
+   - в‘ MetaMod:Source
+   - в‘ SourceMod
+   - вђ SourceMod
+   - в‘ SourceMod
 3. Save and restart server
 
 **Via Environment Variables:**
 
 ```bash
 INSTALL_METAMOD=1
-INSTALL_CSS=1
+INSTALL_SOURCEMOD=1
 INSTALL_SWIFTLY=0
-INSTALL_MODSHARP=1
+INSTALL_SourceMod=1
 ```
 
 ### Dependency Handling
@@ -61,11 +61,11 @@ INSTALL_MODSHARP=1
 The egg automatically handles dependencies:
 
 ```
-CSS enabled + MetaMod disabled
-       ↓
-[WARNING] CounterStrikeSharp requires MetaMod:Source, auto-enabling...
-       ↓
-Both MetaMod and CSS installed
+SourceMod enabled + MetaMod disabled
+       в†“
+[WARNING] SourceMod requires MetaMod:Source, auto-enabling...
+       в†“
+Both MetaMod and SourceMod installed
 ```
 
 ### Load Order Management
@@ -74,10 +74,10 @@ Both MetaMod and CSS installed
 
 ```
 Game_LowViolence    csgo_lv
-            Game    csgo/addons/metamod        ← Always first
-            Game    csgo/addons/counterstrikesharp
-            Game    csgo/addons/swiftlys2
-            Game    sharp                       ← ModSharp
+            Game    csgo/addons/metamod        в†ђ Always first
+            Game    csgo/addons/SourceMod
+            Game    csgo/addons/SourceMod
+            Game    sharp                       в†ђ SourceMod
 
             Game    csgo
 ```
@@ -87,8 +87,8 @@ Game_LowViolence    csgo_lv
 ### What It Does
 
 - Downloads latest stable MetaMod from MetaMod downloads
-- Extracts to `game/csgo/addons/metamod/`
-- Configures `gameinfo.gi` automatically (always first position)
+- Extracts to `csgo/addons/metamod/`
+- Configures `gameinfo.txt` automatically (always first position)
 - Stores version in `/home/container/egg/versions.txt`
 
 ### How It Works
@@ -97,147 +97,147 @@ Game_LowViolence    csgo_lv
 2. Fetches latest version from metamodsource.net
 3. Compares versions (format: `2.x-devXXXX`)
 4. Downloads and extracts if newer version available
-5. Updates `gameinfo.gi` to load MetaMod first
+5. Updates `gameinfo.txt` to load MetaMod first
 
 ### Console Output
 
 ```
-[KitsuneLab] > Checking MetaMod updates...
-[KitsuneLab] > Update available for MetaMod: 2.x-dev1245 (current: 2.x-dev1234)
-[KitsuneLab] > MetaMod updated to 2.x-dev1245
+[Degrando] > Checking MetaMod updates...
+[Degrando] > Update available for MetaMod: 2.x-dev1245 (current: 2.x-dev1234)
+[Degrando] > MetaMod updated to 2.x-dev1245
 ```
 
-## CounterStrikeSharp
+## SourceMod
 
 ### What It Does
 
-- Downloads latest CSS from GitHub releases
-- Extracts to `game/csgo/addons/counterstrikesharp/`
+- Downloads latest SourceMod from GitHub releases
+- Extracts to `csgo/addons/SourceMod/`
 - Installs with-runtime version (includes .NET runtime)
 - Auto-enables MetaMod if not already enabled
 - Stores version in `/home/container/egg/versions.txt`
 
 ### Prerequisites
 
-- **MetaMod required** → Automatically enabled when CSS is toggled on
+- **MetaMod required** в†’ Automatically enabled when SourceMod is toggled on
 
 ### How It Works
 
 1. Checks if MetaMod enabled (auto-enables with warning if not)
-2. Checks current CSS version
-3. Fetches latest release from roflmuffin/CounterStrikeSharp
+2. Checks current SourceMod version
+3. Fetches latest release from roflmuffin/SourceMod
 4. Downloads with-runtime Linux build
 5. Extracts and updates version tracking
 
 ### Console Output
 
 ```
-[KitsuneLab] > [WARNING] CounterStrikeSharp requires MetaMod:Source, auto-enabling...
-[KitsuneLab] > Checking CSS updates...
-[KitsuneLab] > CSS is up-to-date (v1.0.0)
+[Degrando] > [WARNING] SourceMod requires MetaMod:Source, auto-enabling...
+[Degrando] > Checking SourceMod updates...
+[Degrando] > SourceMod is up-to-date (v1.0.0)
 ```
 
 ### Plugin Compatibility
 
-CSS updates may break plugins. Consider:
+SourceMod updates may break plugins. Consider:
 
 - Test updates on development server first
 - Check plugin compatibility before updating
-- Monitor CSS changelog for breaking changes
+- Monitor SourceMod changelog for breaking changes
 - Backup before enabling auto-updates
 
 ### Multi-Framework Compatibility
 
-CounterStrikeSharp can coexist with:
-- [✓] MetaMod (required dependency)
-- [✓] SwiftlyS2
-- [✗] ModSharp (incompatible - ModSharp auto-disabled if CSS enabled)
+SourceMod can coexist with:
+- [вњ“] MetaMod (required dependency)
+- [вњ“] SourceMod
+- [вњ—] SourceMod (incompatible - SourceMod auto-disabled if SourceMod enabled)
 
-## SwiftlyS2
+## SourceMod
 
 ### What It Does
 
-- Downloads latest SwiftlyS2 from GitHub releases
-- Extracts to `game/csgo/addons/swiftlys2/`
+- Downloads latest SourceMod from GitHub releases
+- Extracts to `csgo/addons/SourceMod/`
 - Installs with-runtime Linux version
-- Configures `gameinfo.gi` automatically
-- **Standalone** → No MetaMod dependency
+- Configures `gameinfo.txt` automatically
+- **Standalone** в†’ No MetaMod dependency
 - Stores version in `/home/container/egg/versions.txt`
 
 ### Prerequisites
 
-- **None** → Completely standalone framework
+- **None** в†’ Completely standalone framework
 
 ### How It Works
 
-1. Checks current SwiftlyS2 version
-2. Fetches latest from swiftly-solution/swiftlys2
+1. Checks current SourceMod version
+2. Fetches latest from swiftly-solution/SourceMod
 3. Downloads with-runtimes-linux.zip
-4. Extracts swiftlys2 directory
-5. Updates `gameinfo.gi` to load SwiftlyS2
+4. Extracts SourceMod directory
+5. Updates `gameinfo.txt` to load SourceMod
 6. Removes old metamod VDF file if present (legacy cleanup)
 
 ### Console Output
 
 ```
-[KitsuneLab] > Checking SwiftlyS2 updates...
-[KitsuneLab] > Update available for SwiftlyS2: v0.2.38 (current: v0.2.37)
-[KitsuneLab] > SwiftlyS2 updated to v0.2.38
+[Degrando] > Checking SourceMod updates...
+[Degrando] > Update available for SourceMod: v0.2.38 (current: v0.2.37)
+[Degrando] > SourceMod updated to v0.2.38
 ```
 
 ### Multi-Framework Compatibility
 
-SwiftlyS2 can coexist with:
-- [✓] CounterStrikeSharp (CSS)
-- [✓] MetaMod
-- [✗] ModSharp (incompatible - auto-disabled if ModSharp enabled)
+SourceMod can coexist with:
+- [вњ“] SourceMod (SourceMod)
+- [вњ“] MetaMod
+- [вњ—] SourceMod (incompatible - auto-disabled if SourceMod enabled)
 
-## ModSharp
+## SourceMod
 
 ### What It Does
 
-- Downloads latest ModSharp from GitHub releases
+- Downloads latest SourceMod from GitHub releases
 - Installs .NET 9 runtime automatically
 - Extracts to `game/sharp/`
-- Configures `gameinfo.gi` automatically
-- **Standalone** → No MetaMod dependency
+- Configures `gameinfo.txt` automatically
+- **Standalone** в†’ No MetaMod dependency
 - Stores versions in `/home/container/egg/versions.txt`
 
 ### Prerequisites
 
-- **None** → Completely standalone with bundled .NET 9
+- **None** в†’ Completely standalone with bundled .NET 9
 
 ### How It Works
 
 1. Checks and installs .NET 9.0.0 runtime if needed
-2. Checks current ModSharp version
-3. Fetches latest from Kxnrl/modsharp-public
+2. Checks current SourceMod version
+3. Fetches latest from Kxnrl/SourceMod-public
 4. Downloads core + extensions assets
 5. Extracts preserving existing configs (`core.json` not overwritten)
-6. Updates `gameinfo.gi` to load ModSharp
+6. Updates `gameinfo.txt` to load SourceMod
 
 ### Console Output
 
 ```
-[KitsuneLab] > Installing .NET 9.0.0 runtime...
-[KitsuneLab] > .NET 9.0.0 runtime installed successfully
-[KitsuneLab] > Checking ModSharp updates...
-[KitsuneLab] > Update available for ModSharp: git70 (current: git69)
-[KitsuneLab] > ModSharp updated to git70
+[Degrando] > Installing .NET 9.0.0 runtime...
+[Degrando] > .NET 9.0.0 runtime installed successfully
+[Degrando] > Checking SourceMod updates...
+[Degrando] > Update available for SourceMod: git70 (current: git69)
+[Degrando] > SourceMod updated to git70
 ```
 
 ### Configuration
 
-ModSharp configs are in `game/sharp/configs/core.json`. First install creates default config, updates preserve your settings.
+SourceMod configs are in `game/sharp/configs/core.json`. First install creates default config, updates preserve your settings.
 
 ### Multi-Framework Compatibility
 
-ModSharp can coexist with:
-- [✓] MetaMod only
-- [✗] CounterStrikeSharp (CSS) - incompatible, auto-disabled if ModSharp enabled
-- [✗] SwiftlyS2 - incompatible, auto-disabled if ModSharp enabled
+SourceMod can coexist with:
+- [вњ“] MetaMod only
+- [вњ—] SourceMod (SourceMod) - incompatible, auto-disabled if SourceMod enabled
+- [вњ—] SourceMod - incompatible, auto-disabled if SourceMod enabled
 
-**Note:** ModSharp is a standalone framework that conflicts with other C# frameworks. Only MetaMod can run alongside it.
+**Note:** SourceMod is a standalone framework that conflicts with other C# frameworks. Only MetaMod can run alongside it.
 
 ## Version Tracking
 
@@ -247,9 +247,9 @@ Versions are stored in `/home/container/egg/versions.txt`:
 
 ```
 Metamod=2.x-dev1245
-CSS=v1.1.0
+SourceMod=v1.1.0
 Swiftly=v0.2.38
-ModSharp=git70
+SourceMod=git70
 DotNet=9.0.0
 ```
 
@@ -263,10 +263,10 @@ DotNet=9.0.0
 
 The updater:
 
-- [✓] Only downloads when new version available
-- [✓] Compares versions before downloading
-- [✓] Skips updates if already current
-- [✓] Logs all version changes
+- [вњ“] Only downloads when new version available
+- [вњ“] Compares versions before downloading
+- [вњ“] Skips updates if already current
+- [вњ“] Logs all version changes
 
 This saves bandwidth and startup time.
 
@@ -274,9 +274,9 @@ This saves bandwidth and startup time.
 
 ### When Updates Happen
 
-- **On server startup** → Every time container starts
-- **Not during runtime** → Server must restart to update
-- **After game updates** → Auto-restart triggers update
+- **On server startup** в†’ Every time container starts
+- **Not during runtime** в†’ Server must restart to update
+- **After game updates** в†’ Auto-restart triggers update
 
 ### Forcing Updates
 
@@ -291,7 +291,7 @@ To force update:
 To disable updates for specific framework:
 
 1. Toggle off the framework checkbox in Pterodactyl panel
-2. Or set environment variable to `0`: `INSTALL_CSS=0`
+2. Or set environment variable to `0`: `INSTALL_SOURCEMOD=0`
 3. Framework won't be updated or installed
 
 ## Combining with Auto-Restart
@@ -299,16 +299,16 @@ To disable updates for specific framework:
 Auto-Restart + Auto-Updaters = Fully automated server:
 
 ```
-CS2 Update Detected
-       ↓
+CSGO Update Detected
+       в†“
 Server Restarts
-       ↓
+       в†“
 Game Files Update (SteamCMD)
-       ↓
+       в†“
 Plugins Update (Auto-Updaters)
-       ↓
-gameinfo.gi Load Order Verified
-       ↓
+       в†“
+gameinfo.txt Load Order Verified
+       в†“
 Server Online with Latest Everything
 ```
 
@@ -322,7 +322,7 @@ Perfect for hands-off server management!
 
 - metamodsource.net accessible
 - Sufficient disk space
-- Write permissions on `game/csgo/addons/`
+- Write permissions on `csgo/addons/`
 
 **Solution:**
 
@@ -331,7 +331,7 @@ Perfect for hands-off server management!
 curl -I https://www.metamodsource.net/downloads.php?branch=dev
 ```
 
-### CSS Not Installing
+### SourceMod Not Installing
 
 **Check:**
 
@@ -343,12 +343,12 @@ curl -I https://www.metamodsource.net/downloads.php?branch=dev
 **Common error:**
 
 ```
-[ERROR] No suitable asset found for roflmuffin/CounterStrikeSharp
+[ERROR] No suitable asset found for roflmuffin/SourceMod
 ```
 
-**Solution:** GitHub API rate limit → wait 1 hour or check network access
+**Solution:** GitHub API rate limit в†’ wait 1 hour or check network access
 
-### SwiftlyS2 Not Installing
+### SourceMod Not Installing
 
 **Check:**
 
@@ -356,9 +356,9 @@ curl -I https://www.metamodsource.net/downloads.php?branch=dev
 - Correct asset downloaded (with-runtimes-linux.zip)
 - No file permission issues
 
-**Note:** SwiftlyS2 is standalone, doesn't require MetaMod
+**Note:** SourceMod is standalone, doesn't require MetaMod
 
-### ModSharp Not Installing
+### SourceMod Not Installing
 
 **Check:**
 
@@ -367,7 +367,7 @@ curl -I https://www.metamodsource.net/downloads.php?branch=dev
 - Both core and extensions assets downloading
 - Sufficient disk space for .NET 9 runtime
 
-**Common issue:** .NET runtime download failure → check Microsoft CDN access
+**Common issue:** .NET runtime download failure в†’ check Microsoft CDN access
 
 ### Version Not Updating
 
@@ -386,21 +386,21 @@ curl -I https://www.metamodsource.net/downloads.php?branch=dev
 
 **Problem:** Plugins not loading correctly
 
-**Cause:** Incorrect gameinfo.gi load order
+**Cause:** Incorrect gameinfo.txt load order
 
 **Solution:** MetaMod must be first addon after LowViolence. The egg handles this automatically via `ensure_metamod_first()` function.
 
 **Verify load order:**
 
 ```bash
-cat game/csgo/gameinfo.gi | grep -A 10 "Game_LowViolence"
+cat csgo/gameinfo.txt | grep -A 10 "Game_LowViolence"
 ```
 
 Should show:
 ```
 Game_LowViolence    csgo_lv
-            Game    csgo/addons/metamod        ← MetaMod FIRST
-            Game    csgo/addons/counterstrikesharp
+            Game    csgo/addons/metamod        в†ђ MetaMod FIRST
+            Game    csgo/addons/SourceMod
             ...other addons...
 
             Game    csgo
@@ -426,13 +426,13 @@ If you're using the old `ADDON_SELECTION` dropdown:
 
 **Warning Message:**
 ```
-[KitsuneLab] > [WARNING] DEPRECATION WARNING
-[KitsuneLab] > [WARNING] The ADDON_SELECTION variable is deprecated and will be removed in the next update!
-[KitsuneLab] > [WARNING] Please update your Pterodactyl egg to use the new multi-framework support:
-[KitsuneLab] > [WARNING]   → INSTALL_METAMOD (boolean)
-[KitsuneLab] > [WARNING]   → INSTALL_CSS (boolean)
-[KitsuneLab] > [WARNING]   → INSTALL_SWIFTLY (boolean)
-[KitsuneLab] > [WARNING]   → INSTALL_MODSHARP (boolean)
+[Degrando] > [WARNING] DEPRECATION WARNING
+[Degrando] > [WARNING] The ADDON_SELECTION variable is deprecated and will be removed in the next update!
+[Degrando] > [WARNING] Please update your Pterodactyl egg to use the new multi-framework support:
+[Degrando] > [WARNING]   в†’ INSTALL_METAMOD (boolean)
+[Degrando] > [WARNING]   в†’ INSTALL_SOURCEMOD (boolean)
+[Degrando] > [WARNING]   в†’ INSTALL_SWIFTLY (boolean)
+[Degrando] > [WARNING]   в†’ INSTALL_SourceMod (boolean)
 ```
 
 **Migration Steps:**
@@ -440,8 +440,8 @@ If you're using the old `ADDON_SELECTION` dropdown:
 1. Download latest egg JSON from GitHub
 2. Re-import egg in Pterodactyl panel
 3. Configure new boolean variables to match your current setup:
-   - Old: `ADDON_SELECTION="Metamod + CounterStrikeSharp"`
-   - New: `INSTALL_METAMOD=1` + `INSTALL_CSS=1`
+   - Old: `ADDON_SELECTION="Metamod + SourceMod"`
+   - New: `INSTALL_METAMOD=1` + `INSTALL_SOURCEMOD=1`
 4. Restart server
 5. Verify frameworks load correctly
 
@@ -452,9 +452,9 @@ The old `ADDON_SELECTION` variable still works temporarily:
 | Old Value                          | New Equivalent                      |
 | ---------------------------------- | ----------------------------------- |
 | `Metamod Only`                     | `INSTALL_METAMOD=1`                 |
-| `Metamod + CounterStrikeSharp`     | `INSTALL_METAMOD=1` + `INSTALL_CSS=1` |
-| `SwiftlyS2`                        | `INSTALL_SWIFTLY=1`                 |
-| `ModSharp`                         | `INSTALL_MODSHARP=1`                |
+| `Metamod + SourceMod`     | `INSTALL_METAMOD=1` + `INSTALL_SOURCEMOD=1` |
+| `SourceMod`                        | `INSTALL_SWIFTLY=1`                 |
+| `SourceMod`                         | `INSTALL_SourceMod=1`                |
 
 This compatibility will be removed in the next major update!
 
@@ -463,25 +463,25 @@ This compatibility will be removed in the next major update!
 1. **Test updates** on dev server before production
 2. **Backup plugins** before enabling auto-updates
 3. **Monitor changelogs** for breaking changes
-4. **Use multi-framework wisely** → Test compatibility between frameworks
-5. **Keep MetaMod updated** → Required by CSS
+4. **Use multi-framework wisely** в†’ Test compatibility between frameworks
+5. **Keep MetaMod updated** в†’ Required by SourceMod
 6. **Check plugin compatibility** after updates
 7. **Use stable releases** in production
-8. **Enable only needed frameworks** → Reduces startup time
+8. **Enable only needed frameworks** в†’ Reduces startup time
 
 ## FAQ
 
-**Q: Can I use CSS and SwiftlyS2 together?**
+**Q: Can I use SourceMod and SourceMod together?**
 A: Yes! They are compatible frameworks and can coexist.
 
-**Q: Can I use CSS and ModSharp together?**
-A: No. ModSharp is incompatible with CSS. If ModSharp is enabled, CSS will be auto-disabled with a warning message.
+**Q: Can I use SourceMod and SourceMod together?**
+A: No. SourceMod is incompatible with SourceMod. If SourceMod is enabled, SourceMod will be auto-disabled with a warning message.
 
-**Q: Can I use SwiftlyS2 and ModSharp together?**
-A: No. ModSharp is incompatible with SwiftlyS2. If ModSharp is enabled, SwiftlyS2 will be auto-disabled with a warning message.
+**Q: Can I use SourceMod and SourceMod together?**
+A: No. SourceMod is incompatible with SourceMod. If SourceMod is enabled, SourceMod will be auto-disabled with a warning message.
 
-**Q: What frameworks are compatible with ModSharp?**
-A: ModSharp is only compatible with MetaMod. It cannot run alongside CSS or SwiftlyS2.
+**Q: What frameworks are compatible with SourceMod?**
+A: SourceMod is only compatible with MetaMod. It cannot run alongside SourceMod or SourceMod.
 
 **Q: Will updates break my plugins?**
 A: Possibly. Major updates can have breaking changes. Test on dev server first.
@@ -489,8 +489,8 @@ A: Possibly. Major updates can have breaking changes. Test on dev server first.
 **Q: Can I rollback an update?**
 A: Yes, manually install older version and toggle off auto-updates for that framework.
 
-**Q: How do I update only MetaMod, not CSS?**
-A: Toggle off CSS checkbox, keep MetaMod enabled.
+**Q: How do I update only MetaMod, not SourceMod?**
+A: Toggle off SourceMod checkbox, keep MetaMod enabled.
 
 **Q: Are beta versions supported?**
 A: No, only stable releases from official repos.
@@ -504,21 +504,21 @@ A: Not built-in. You'll need to modify update scripts or manage them manually.
 **Q: Where are versions stored?**
 A: In `/home/container/egg/versions.txt` (accessible via FTP)
 
-**Q: Does SwiftlyS2 require MetaMod?**
-A: No! SwiftlyS2 v2 is standalone and doesn't require MetaMod.
+**Q: Does SourceMod require MetaMod?**
+A: No! SourceMod v2 is standalone and doesn't require MetaMod.
 
 **Q: Can I enable all 4 frameworks simultaneously?**
-A: No. ModSharp is incompatible with CSS and SwiftlyS2. Maximum 3 frameworks simultaneously: MetaMod + CSS + SwiftlyS2. If you enable ModSharp with CSS/SwiftlyS2, ModSharp will be auto-disabled with a warning.
+A: No. SourceMod is incompatible with SourceMod and SourceMod. Maximum 3 frameworks simultaneously: MetaMod + SourceMod + SourceMod. If you enable SourceMod with SourceMod/SourceMod, SourceMod will be auto-disabled with a warning.
 
 ## Related Documentation
 
-- [VPK Sync & Centralized Updates](vpk-sync.md) → Automatic CS2 updates and server restarts
-- [Configuration Files](../configuration/configuration-files.md) → All configuration options
-- [Building from Source](../advanced/building.md) → Customize update logic
+- [VPK Sync & Centralized Updates](vpk-sync.md) в†’ Automatic CSGO updates and server restarts
+- [Configuration Files](../configuration/configuration-files.md) в†’ All configuration options
+- [Building from Source](../advanced/building.md) в†’ Customize update logic
 
 ## Support
 
 Having update issues?
 
-- [Report Issue](https://github.com/K4ryuu/CS2-Egg/issues)
+- [Report Issue](https://github.com/degrando/csgo-egg/issues)
 - [Troubleshooting Guide](../advanced/troubleshooting.md)

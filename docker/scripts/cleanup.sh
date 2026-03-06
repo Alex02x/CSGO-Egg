@@ -57,12 +57,10 @@ format_size() {
 
 cleanup() {
     # Grab config values (already loaded by config.sh)
-    local GAME_DIRECTORY="${CLEANUP_GAME_DIR:-./game/csgo}"
+    local GAME_DIRECTORY="${CLEANUP_GAME_DIR:-./csgo}"
     local BACKUP_ROUND_PURGE_INTERVAL="${CLEANUP_BACKUP_HOURS:-24}"
     local DEMO_PURGE_INTERVAL="${CLEANUP_DEMOS_HOURS:-168}"
-    local CSS_JUNK_PURGE_INTERVAL="${CLEANUP_LOGS_HOURS:-72}"
-    local ACCELERATOR_DUMP_PURGE_INTERVAL="${CLEANUP_DUMPS_HOURS:-168}"
-    local ACCELERATOR_DUMPS_DIR="${CLEANUP_DUMPS_DIR:-./game/csgo/addons/AcceleratorCS2/dumps}"
+    local SM_JUNK_PURGE_INTERVAL="${CLEANUP_LOGS_HOURS:-72}"
 
     # Make sure the game dir actually exists
     if [ ! -d "$GAME_DIRECTORY" ]; then
@@ -80,10 +78,7 @@ cleanup() {
     declare -A stats=(
         ["backup_rounds"]=0
         ["demos"]=0
-        ["css_logs"]=0
-        ["swiftly_logs"]=0
-        ["accelerator_logs"]=0
-        ["accelerator_dumps"]=0
+        ["sm_logs"]=0
         ["core_dumps"]=0
     )
 
@@ -125,39 +120,20 @@ cleanup() {
             log_deletion "$file" "backup_rounds"
         elif [[ "$file" == *.dem ]]; then
             log_deletion "$file" "demos"
-        elif [[ "$file" == */addons/counterstrikesharp/logs/* ]]; then
-            log_deletion "$file" "css_logs"
-        elif [[ "$file" == */addons/swiftlys2/logs/* ]]; then
-            log_deletion "$file" "swiftly_logs"
+        elif [[ "$file" == */addons/sourcemod/logs/* ]]; then
+            log_deletion "$file" "sm_logs"
         fi
     done < <(find "$GAME_DIRECTORY" \( \
         -name "backup_round*.txt" -mmin "+$((BACKUP_ROUND_PURGE_INTERVAL*60))" -o \
         -name "*.dem" -mmin "+$((DEMO_PURGE_INTERVAL*60))" -o \
-        \( -path "*/addons/counterstrikesharp/logs/*.txt" -mmin "+$((CSS_JUNK_PURGE_INTERVAL*60))" \) -o \
-        \( -path "*/addons/swiftlys2/logs/*.log" -mmin "+$((CSS_JUNK_PURGE_INTERVAL*60))" \) \
+        \( -path "*/addons/sourcemod/logs/*.log" -mmin "+$((SM_JUNK_PURGE_INTERVAL*60))" \) \
         \) -print0 2>/dev/null)
 
-    # Handle Accelerator logs with proper error checking
-    if [ -d "$ACCELERATOR_DUMPS_DIR" ]; then
-        while IFS= read -r -d '' file; do
-            if [[ "$file" == *.dmp.txt ]]; then
-                log_deletion "$file" "accelerator_logs"
-            else
-                log_deletion "$file" "accelerator_dumps"
-            fi
-        done < <(find "$ACCELERATOR_DUMPS_DIR" \( \
-            -name "*.dmp.txt" -o \
-            -name "*.dmp" \
-            \) -mmin "+$((ACCELERATOR_DUMP_PURGE_INTERVAL*60))" -print0 2>/dev/null)
-    fi
-
     # Clean up core dumps (deleted on every restart)
-    local core_dumps_dir="./game/bin/linuxsteamrt64"
-    if [ -d "$core_dumps_dir" ]; then
-        while IFS= read -r -d '' file; do
-            log_deletion "$file" "core_dumps"
-        done < <(find "$core_dumps_dir" -maxdepth 1 -type f \( -name "core" -o -name "core.[0-9]*" \) -print0 2>/dev/null)
-    fi
+    local core_dumps_dir="."
+    while IFS= read -r -d '' file; do
+        log_deletion "$file" "core_dumps"
+    done < <(find "$core_dumps_dir" -maxdepth 1 -type f \( -name "core" -o -name "core.[0-9]*" \) -print0 2>/dev/null)
 
     local end_time
     end_time=$(date +%s)

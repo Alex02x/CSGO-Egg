@@ -48,22 +48,22 @@ sync_files() {
 
     log_message "Syncing VPK files..." "info"
 
-    # Sync everything EXCEPT .vpk files, configs, and gameinfo.gi
+    # Sync everything EXCEPT .vpk files, configs, and gameinfo.txt
     # We'll symlink VPKs separately to save space
-    # gameinfo.gi is excluded to preserve addon configurations
-    if rsync -aKLz --exclude '*.vpk' --exclude 'cfg/' --exclude 'game/csgo/gameinfo.gi' "$src_dir/" "$dest_dir" 2>/dev/null; then
+    # gameinfo.txt is excluded to preserve addon configurations
+    if rsync -aKLz --exclude '*.vpk' --exclude 'cfg/' --exclude 'csgo/gameinfo.txt' "$src_dir/" "$dest_dir" 2>/dev/null; then
         : # base files synced silently
     else
         log_message "Failed to sync base files" "error"
         return 1
     fi
 
-    # Copy gameinfo.gi only if it doesn't exist (first boot)
-    local gameinfo_src="$src_dir/game/csgo/gameinfo.gi"
-    local gameinfo_dest="$dest_dir/game/csgo/gameinfo.gi"
+    # Copy gameinfo.txt only if it doesn't exist (first boot)
+    local gameinfo_src="$src_dir/csgo/gameinfo.txt"
+    local gameinfo_dest="$dest_dir/csgo/gameinfo.txt"
     if [ -f "$gameinfo_src" ] && [ ! -f "$gameinfo_dest" ]; then
         cp "$gameinfo_src" "$gameinfo_dest" 2>/dev/null
-        log_message "Copied initial gameinfo.gi" "debug"
+        log_message "Copied initial gameinfo.txt" "debug"
     fi
 
     # Now create symlinks for all the VPK files
@@ -110,8 +110,8 @@ sync_cfg_files() {
 
     local src_dir="${SYNC_LOCATION}"
     local dest_dir="/home/container"
-    local cfg_src_dir="$src_dir/game/csgo/cfg"
-    local cfg_dest_dir="$dest_dir/game/csgo/cfg"
+    local cfg_src_dir="$src_dir/csgo/cfg"
+    local cfg_dest_dir="$dest_dir/csgo/cfg"
 
     # Bail if there's no cfg directory to sync
     if [ ! -d "$cfg_src_dir" ]; then

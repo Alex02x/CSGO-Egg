@@ -120,7 +120,7 @@ create_console_filter_config() {
   "_description": [
     "Console Filter Configuration",
     "",
-    "Filter unwanted console messages from CS2 server output.",
+    "Filter unwanted console messages from CSGO server output.",
     "",
     "Settings:",
     "  - preview_mode: Show blocked messages in debug log (true/false)",
@@ -173,18 +173,15 @@ create_cleanup_config() {
     "Settings:",
     "  - intervals.backup_rounds_hours: Delete backup_round*.txt files older than X hours",
     "  - intervals.demos_hours: Delete *.dem demo files older than X hours",
-    "  - intervals.css_logs_hours: Delete CounterStrikeSharp logs older than X hours",
-    "  - intervals.accelerator_dumps_hours: Delete Accelerator crash dumps older than X hours",
+    "  - intervals.sm_logs_hours: Delete SourceMod logs older than X hours",
     "",
     "Paths:",
-    "  - paths.game_directory: Base game directory (usually ./game/csgo)",
-    "  - paths.accelerator_dumps: AcceleratorCS2 dumps directory",
+    "  - paths.game_directory: Base game directory (usually ./csgo)",
     "",
     "Default intervals:",
     "  - Backup rounds: 24 hours (1 day)",
     "  - Demos: 168 hours (7 days)",
-    "  - CSS logs: 72 hours (3 days)",
-    "  - Accelerator dumps: 168 hours (7 days)",
+    "  - SourceMod logs: 72 hours (3 days)",
     "",
   "Enable this feature by setting CLEANUP_ENABLED=1 in the Pterodactyl egg.",
     "",
@@ -193,12 +190,10 @@ create_cleanup_config() {
   "intervals": {
     "backup_rounds_hours": 24,
     "demos_hours": 168,
-    "css_logs_hours": 72,
-    "accelerator_dumps_hours": 168
+    "sm_logs_hours": 72
   },
   "paths": {
-    "game_directory": "./game/csgo",
-    "accelerator_dumps": "./game/csgo/addons/AcceleratorCS2/dumps"
+    "game_directory": "./csgo"
   }
 }
 EOF
@@ -288,10 +283,8 @@ load_configs() {
   if [ "${CLEANUP_ENABLED:-${ENABLE_CLEANUP:-0}}" -eq 1 ]; then
         export CLEANUP_BACKUP_HOURS=$(get_config_value "cleanup.json" ".intervals.backup_rounds_hours" "24")
         export CLEANUP_DEMOS_HOURS=$(get_config_value "cleanup.json" ".intervals.demos_hours" "168")
-        export CLEANUP_LOGS_HOURS=$(get_config_value "cleanup.json" ".intervals.css_logs_hours" "72")
-        export CLEANUP_DUMPS_HOURS=$(get_config_value "cleanup.json" ".intervals.accelerator_dumps_hours" "168")
-        export CLEANUP_GAME_DIR=$(get_config_value "cleanup.json" ".paths.game_directory" "./game/csgo")
-        export CLEANUP_DUMPS_DIR=$(get_config_value "cleanup.json" ".paths.accelerator_dumps" "./game/csgo/addons/AcceleratorCS2/dumps")
+        export CLEANUP_LOGS_HOURS=$(get_config_value "cleanup.json" ".intervals.sm_logs_hours" "72")
+        export CLEANUP_GAME_DIR=$(get_config_value "cleanup.json" ".paths.game_directory" "./csgo")
     fi
 
     # Load logging config (always available, not feature-gated)

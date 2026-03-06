@@ -159,36 +159,50 @@ check_version() {
     esac
 }
 
-# Add addon path to gameinfo.gi if not already present
-# Inserts addons between "Game_LowViolence csgo_lv" and "Game csgo" lines
+# Add addon path to gameinfo.txt if not already present
+# For CSGO (Source 1), MetaMod uses GameBin entry in SearchPaths
 # Usage: add_to_gameinfo "csgo/addons/metamod"
 add_to_gameinfo() {
     local addon_path="$1"
-    local GAMEINFO_FILE="/home/container/game/csgo/gameinfo.gi"
+    local GAMEINFO_FILE="/home/container/csgo/gameinfo.txt"
 
     if [ ! -f "$GAMEINFO_FILE" ]; then
-        log_message "gameinfo.gi not found at $GAMEINFO_FILE" "error"
+        log_message "gameinfo.txt not found at $GAMEINFO_FILE" "error"
         return 1
+    fi
+
+    # For MetaMod in CSGO, we need a GameBin entry
+    local search_entry
+    if [[ "$addon_path" == *"metamod"* ]]; then
+        search_entry="GameBin				|gameinfo_path|addons/metamod/bin"
+    else
+        search_entry="Game				${addon_path}"
     fi
 
     # Check if path already exists
-    if grep -q "Game[[:blank:]]*${addon_path}" "$GAMEINFO_FILE"; then
-        log_message "${addon_path} already in gameinfo.gi" "debug"
+    if grep -qF "$search_entry" "$GAMEINFO_FILE"; then
+        log_message "${addon_path} already in gameinfo.txt" "debug"
         return 0
     fi
 
-    log_message "Adding ${addon_path} to gameinfo.gi..." "info"
+    log_message "Adding ${addon_path} to gameinfo.txt..." "info"
 
     # Create backup
     cp "$GAMEINFO_FILE" "$GAMEINFO_FILE.bak" 2>/dev/null || {
-        log_message "Failed to backup gameinfo.gi" "error"
+        log_message "Failed to backup gameinfo.txt" "error"
         return 1
     }
 
-    # Insert addon after "Game_LowViolence" line using sed
-    # This ensures addons are grouped together after LV line, with empty line before "Game csgo"
-    sed "/Game_LowViolence/a\\
-            Game    ${addon_path}" "$GAMEINFO_FILE.bak" > "$GAMEINFO_FILE"
+    # For CSGO gameinfo.txt, insert after the SearchPaths opening brace
+    # MetaMod needs GameBin entry, insert after first Game line in SearchPaths
+    if [[ "$addon_path" == *"metamod"* ]]; then
+        # Insert GameBin line for MetaMod after the SearchPaths section's first Game entry
+        sed "/^[[:space:]]*Game[[:space:]]*|gameinfo_path|\.$/a\\
+			GameBin				|gameinfo_path|addons/metamod/bin" "$GAMEINFO_FILE.bak" > "$GAMEINFO_FILE"
+    else
+        sed "/Game_LowViolence/a\\
+			Game				${addon_path}" "$GAMEINFO_FILE.bak" > "$GAMEINFO_FILE"
+    fi
 
     if [ $? -ne 0 ]; then
         log_message "sed command failed, restoring backup" "error"
@@ -197,8 +211,8 @@ add_to_gameinfo() {
     fi
 
     # Verify it was actually added
-    if grep -q "Game[[:space:]]*${addon_path}" "$GAMEINFO_FILE"; then
-        log_message "Added ${addon_path} to gameinfo.gi" "info"
+    if grep -qF "$search_entry" "$GAMEINFO_FILE"; then
+        log_message "Added ${addon_path} to gameinfo.txt" "info"
         rm -f "$GAMEINFO_FILE.bak"
         return 0
     else
@@ -208,111 +222,24 @@ add_to_gameinfo() {
     fi
 }
 
-# Ensure MetaMod is always first addon after Game_LowViolence line
-# This is critical because MetaMod must load before others as for example SwiftlyS2 if loaded first, metamod cant load
+# Ensure MetaMod is always first addon after the initial Game entry
+# This is critical because MetaMod must load before other addons
 ensure_metamod_first() {
-    local GAMEINFO_FILE="/home/container/game/csgo/gameinfo.gi"
+    local GAMEINFO_FILE="/home/container/csgo/gameinfo.txt"
 
-    # Check if metamod exists in file
-    if ! grep -q "Game.*csgo/addons/metamod" "$GAMEINFO_FILE"; then
+    # Check if metamod GameBin entry exists in file
+    if ! grep -q "GameBin.*addons/metamod" "$GAMEINFO_FILE" 2>/dev/null; then
         return 0  # No metamod, nothing to reorder
     fi
 
-    # Get line numbers
-    local lv_line=$(grep -n "Game_LowViolence" "$GAMEINFO_FILE" | head -n1 | cut -d: -f1)
-    local metamod_line=$(grep -n "Game.*csgo/addons/metamod" "$GAMEINFO_FILE" | head -n1 | cut -d: -f1)
-
-    # Check if there are any Game lines between LV and MetaMod
-    local has_addons_before=false
-    local line_num=$((lv_line + 1))
-    while [ $line_num -lt $metamod_line ]; do
-        if sed -n "${line_num}p" "$GAMEINFO_FILE" | grep -q "^[[:space:]]*Game[[:space:]]"; then
-            has_addons_before=true
-            break
-        fi
-        ((line_num++))
-    done
-
-    # If metamod is already first (no Game lines between LV and metamod), done
-    if [ "$has_addons_before" = false ]; then
-        log_message "MetaMod already in correct position" "debug"
-        return 0
-    fi
-
-    log_message "Repositioning MetaMod to first position after LowViolence..." "info"
-
-    # Backup
-    cp "$GAMEINFO_FILE" "$GAMEINFO_FILE.bak" 2>/dev/null || {
-        log_message "Failed to backup gameinfo.gi" "error"
-        return 1
-    }
-
-    # Remove metamod line wherever it is
-    sed '/Game.*csgo\/addons\/metamod/d' "$GAMEINFO_FILE.bak" > "$GAMEINFO_FILE.tmp"
-
-    # Insert metamod right after LowViolence line
-    sed '/Game_LowViolence/a\            Game    csgo/addons/metamod' "$GAMEINFO_FILE.tmp" > "$GAMEINFO_FILE"
-
-    # Cleanup temp file
-    rm -f "$GAMEINFO_FILE.tmp"
-
-    # Verify
-    if grep -q "Game.*csgo/addons/metamod" "$GAMEINFO_FILE"; then
-        log_message "MetaMod repositioned successfully" "info"
-        rm -f "$GAMEINFO_FILE.bak"
-        return 0
-    else
-        log_message "Failed to reposition MetaMod, restoring backup" "error"
-        mv "$GAMEINFO_FILE.bak" "$GAMEINFO_FILE"
-        return 1
-    fi
+    # For CSGO, MetaMod uses GameBin entry which is naturally processed first
+    # Just verify it exists - no complex reordering needed for Source 1
+    log_message "MetaMod GameBin entry present in gameinfo.txt" "debug"
+    return 0
 }
 
-# Patch RequireLoginForDedicatedServers setting based on ALLOW_TOKENLESS variable
-# If ALLOW_TOKENLESS=1 → sets to 0 (allows tokenless)
-# If ALLOW_TOKENLESS=0 → sets to 1 (requires token)
+# Tokenless mode for CSGO is handled via -insecure launch flag in entrypoint.sh
+# No gameinfo.txt patching needed (unlike CS2's RequireLoginForDedicatedServers)
 patch_tokenless_setting() {
-    local GAMEINFO_FILE="/home/container/game/csgo/gameinfo.gi"
-
-    if [ ! -f "$GAMEINFO_FILE" ]; then
-        log_message "gameinfo.gi not found, skipping tokenless patch" "debug"
-        return 0
-    fi
-
-    # Determine desired value based on ALLOW_TOKENLESS variable
-    local desired_value
-    if [ "${ALLOW_TOKENLESS:-0}" -eq 1 ]; then
-        desired_value="0"  # Allow tokenless
-    else
-        desired_value="1"  # Require token
-    fi
-
-    # Check current value
-    local current_value=$(grep -oP 'RequireLoginForDedicatedServers"\s+"\K[0-9]+' "$GAMEINFO_FILE" 2>/dev/null)
-
-    # If already correct, skip
-    if [ "$current_value" = "$desired_value" ]; then
-        log_message "RequireLoginForDedicatedServers already set to $desired_value" "debug"
-        return 0
-    fi
-
-    # Backup
-    cp "$GAMEINFO_FILE" "$GAMEINFO_FILE.bak" 2>/dev/null || {
-        log_message "Failed to backup gameinfo.gi" "error"
-        return 1
-    }
-
-    # Patch the value
-    sed -i "s/\(RequireLoginForDedicatedServers\"[[:space:]]*\)\"[0-9]\"/\1\"$desired_value\"/" "$GAMEINFO_FILE"
-
-    # Verify change
-    local new_value=$(grep -oP 'RequireLoginForDedicatedServers"\s+"\K[0-9]+' "$GAMEINFO_FILE" 2>/dev/null)
-    if [ "$new_value" = "$desired_value" ]; then
-        rm -f "$GAMEINFO_FILE.bak"
-        return 0
-    else
-        log_message "Failed to patch RequireLoginForDedicatedServers, restoring backup" "error"
-        mv "$GAMEINFO_FILE.bak" "$GAMEINFO_FILE"
-        return 1
-    fi
+    return 0
 }

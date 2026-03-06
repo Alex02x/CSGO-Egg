@@ -1,6 +1,6 @@
-# GDB Debugging
+﻿# GDB Debugging
 
-Remote debugging for CS2 server crash analysis and plugin development.
+Remote debugging for CSGO server crash analysis and plugin development.
 
 ## Quick Setup
 
@@ -19,7 +19,7 @@ GDB_DEBUG_PORT=27016
 
 ### 2. Server Behavior
 
-**⚠️ IMPORTANT**: When GDB is enabled, server **locks on startup** until debugger connects!
+**вљ пёЏ IMPORTANT**: When GDB is enabled, server **locks on startup** until debugger connects!
 
 Console shows:
 
@@ -32,7 +32,7 @@ Server waits frozen - **this is normal**. Connect debugger to continue.
 
 ## Connecting with IDA Pro
 
-1. **Debugger → Attach → Remote GDB debugger**
+1. **Debugger в†’ Attach в†’ Remote GDB debugger**
 2. Enter server IP and port `27016`
 3. Resume the process
 
@@ -67,7 +67,7 @@ Now you can:
 
 ## Security Warning
 
-**⚠️ NEVER enable on production servers!**
+**вљ пёЏ NEVER enable on production servers!**
 
 Debugging gives full process access:
 

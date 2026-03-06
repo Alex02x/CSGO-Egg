@@ -1,4 +1,4 @@
-# Troubleshooting
+﻿# Troubleshooting
 
 Common issues and their solutions.
 
@@ -42,11 +42,11 @@ Common issues and their solutions.
 
 ### Script Not Running
 
-**Problem**: Centralized update script (`misc/update-cs2-centralized.sh`) not running.
+**Problem**: Centralized update script (`misc/update-csgo-centralized.sh`) not running.
 
 **Checklist**:
 
-- [ ] Script has execute permissions: `chmod +x misc/update-cs2-centralized.sh`
+- [ ] Script has execute permissions: `chmod +x misc/update-csgo-centralized.sh`
 - [ ] Docker daemon is running and accessible
 - [ ] Script is configured in cron (if using auto-updates)
 - [ ] VPK Sync paths are correct in script configuration
@@ -54,8 +54,8 @@ Common issues and their solutions.
 **Test manual run**:
 
 ```bash
-cd /path/to/CS2-Egg
-./misc/update-cs2-centralized.sh
+cd /path/to/CSGO-Egg
+./misc/update-csgo-centralized.sh
 ```
 
 **Check script logs**:
@@ -76,26 +76,26 @@ cd /path/to/CS2-Egg
 1. Wait for current update to complete (check `docker ps` for update activity)
 2. Only remove lock if script is truly stuck (not running for 30+ minutes):
    ```bash
-   rm /tmp/cs2-update.lock
+   rm /tmp/csgo-update.lock
    ```
 3. Check for hung Docker operations: `docker ps -a`
 
 ### Docker Container Not Restarting
 
-**Problem**: CS2 update completed but servers not restarting.
+**Problem**: CSGO update completed but servers not restarting.
 
 **Checklist**:
 
 - [ ] `AUTO_RESTART_SERVERS="true"` in script configuration
 - [ ] Docker image name matches running containers
 - [ ] Docker daemon has permission to restart containers
-- [ ] Containers are using VPK Sync image (docker.io/sples1/k4ryuu-cs2)
+- [ ] Containers are using VPK Sync image (docker.io/degrando/csgo-egg)
 
 **Debug**:
 
 ```bash
 # Check which containers would be restarted
-docker ps --format "{{.Names}}\t{{.Image}}" | grep "sples1/k4ryuu-cs2"
+docker ps --format "{{.Names}}\t{{.Image}}" | grep "degrando/csgo-egg"
 
 # Manually restart a container
 docker restart <container_name>
@@ -124,44 +124,44 @@ docker restart <container_name>
 1. Check `INSTALL_METAMOD` is set to `1` in Pterodactyl Startup tab
 2. Verify internet connectivity
 3. Check metamodsource.net website is accessible
-4. Manually check `/game/csgo/addons/metamod/` exists
+4. Manually check `/csgo/addons/metamod/` exists
 5. Review console logs for download errors
 6. Delete `/egg/versions.txt` and restart to force re-download
 
-### CounterStrikeSharp Won't Update
+### SourceMod Won't Update
 
-**Problem**: CSS doesn't update or install.
+**Problem**: SourceMod doesn't update or install.
 
 **Solutions**:
 
-1. Set `INSTALL_CSS` to `1` in Pterodactyl Startup tab
+1. Set `INSTALL_SOURCEMOD` to `1` in Pterodactyl Startup tab
 2. MetaMod automatically enabled (it's a dependency) - check for warning message
 3. Check GitHub API isn't rate-limited
-4. Verify `/game/csgo/addons/counterstrikesharp/` directory
+4. Verify `/csgo/addons/SourceMod/` directory
 5. Check console for download/extraction errors
 6. Delete `/egg/versions.txt` and restart to force re-download
 
-### SwiftlyS2 Won't Install
+### SourceMod Won't Install
 
-**Problem**: SwiftlyS2 not working.
+**Problem**: SourceMod not working.
 
 **Solutions**:
 
 1. Set `INSTALL_SWIFTLY` to `1` in Pterodactyl Startup tab
-2. SwiftlyS2 v2 is standalone (no MetaMod required)
-3. Check GitHub releases are accessible (swiftly-solution/swiftlys2)
+2. SourceMod v2 is standalone (no MetaMod required)
+3. Check GitHub releases are accessible (swiftly-solution/SourceMod)
 4. Look for errors in console during startup
-5. Verify `/game/csgo/addons/swiftlys2/` directory exists
+5. Verify `/csgo/addons/SourceMod/` directory exists
 
-### ModSharp Won't Install
+### SourceMod Won't Install
 
-**Problem**: ModSharp not working.
+**Problem**: SourceMod not working.
 
 **Solutions**:
 
-1. Set `INSTALL_MODSHARP` to `1` in Pterodactyl Startup tab
+1. Set `INSTALL_SourceMod` to `1` in Pterodactyl Startup tab
 2. Check .NET 9 runtime installation succeeded (check logs)
-3. Verify GitHub releases accessible (Kxnrl/modsharp-public)
+3. Verify GitHub releases accessible (Kxnrl/SourceMod-public)
 4. Check `/game/sharp/` directory exists
 5. Review console for download/extraction errors
 
@@ -372,11 +372,11 @@ docker restart <container_name>
 
 ### Before Asking for Help
 
-1. [✓] Check this troubleshooting guide
-2. [✓] Search existing GitHub issues
-3. [✓] Check console logs for errors
-4. [✓] Verify your configuration
-5. [✓] Test with default settings
+1. [вњ“] Check this troubleshooting guide
+2. [вњ“] Search existing GitHub issues
+3. [вњ“] Check console logs for errors
+4. [вњ“] Verify your configuration
+5. [вњ“] Test with default settings
 
 ### When Reporting Issues
 
@@ -391,14 +391,14 @@ Include:
 
 ### Where to Get Help
 
-- [GitHub Issues](https://github.com/K4ryuu/CS2-Egg/issues) - Bug reports and feature requests
-- [GitHub Discussions](https://github.com/K4ryuu/CS2-Egg/discussions) - Questions and community help
+- [GitHub Issues](https://github.com/degrando/csgo-egg/issues) - Bug reports and feature requests
+- [GitHub Discussions](https://github.com/degrando/csgo-egg/discussions) - Questions and community help
 
 ## Common Error Messages
 
 ### "Segmentation fault"
 
-Usually a CS2 server crash, not related to the egg. Check CS2 server logs and plugins.
+Usually a CSGO server crash, not related to the egg. Check CSGO server logs and plugins.
 
 ### "Connection to Steam servers successful"
 
@@ -406,7 +406,7 @@ This is GOOD! It means server started successfully.
 
 ### "Failed to load plugin"
 
-Check plugin compatibility with current CS2 version and installed dependencies.
+Check plugin compatibility with current CSGO version and installed dependencies.
 
 ### "Rate limit exceeded"
 
@@ -432,4 +432,4 @@ GitHub/Steam API rate limit. Increase check intervals or wait before retrying.
 
 ## Still Having Issues?
 
-[Create a GitHub Issue](https://github.com/K4ryuu/CS2-Egg/issues/new/choose) with all relevant information.
+[Create a GitHub Issue](https://github.com/degrando/csgo-egg/issues/new/choose) with all relevant information.

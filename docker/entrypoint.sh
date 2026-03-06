@@ -102,7 +102,7 @@ if [ -n "${SRCDS_APPID}" ] && [ "${SRCDS_STOP_UPDATE:-0}" -eq 0 ]; then
     if [ $STEAM_EXIT_CODE -eq 8 ]; then
         log_message "SteamCMD connection error (exit code 8)" "error"
         log_message "1. Check network and Steam server status (steamstat.us)" "info"
-        log_message "2. Ensure 60-70GB free disk space available (with VPK-Sync 3GB free)" "info"
+        log_message "2. Ensure 20-30GB free disk space available (with VPK-Sync 3GB free)" "info"
         log_message "3. Disable proxy/VPN if enabled" "info"
     elif [ $STEAM_EXIT_CODE -ne 0 ]; then
         log_message "SteamCMD failed with exit code $STEAM_EXIT_CODE" "error"
@@ -122,13 +122,18 @@ setup_message_filter
 # Build the actual startup command from template
 MODIFIED_STARTUP=$(eval echo $(echo ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g'))
 
+# Add -insecure flag if tokenless server is allowed
+if [ "${ALLOW_TOKENLESS:-0}" -eq 1 ] && [ -z "${STEAM_ACC}" ]; then
+    MODIFIED_STARTUP="${MODIFIED_STARTUP} -insecure"
+    log_message "Running in tokenless mode (-insecure)" "warning"
+fi
+
 # Log the command but hide the Steam account token for security
 LOGGED_STARTUP=$(echo "${MODIFIED_STARTUP}" | \
     sed -E 's/(\+sv_setsteamaccount\s+[A-Z0-9]{32})/+sv_setsteamaccount ************************/g')
 log_message "Starting server: ${LOGGED_STARTUP}" "info"
 
-# GDB mode: use Valve's built-in GAME_DEBUGGER support (cs2.sh line 106)
-# gdbserver launches cs2 as parent process, so no SYS_PTRACE capability needed
+# GDB mode: launch server under gdbserver for remote debugging
 if [ -n "${GDB_DEBUG_PORT}" ]; then
     export GAME_DEBUGGER="gdbserver --no-disable-randomization :${GDB_DEBUG_PORT}"
     log_message "GDB mode: Server will start under gdbserver on port ${GDB_DEBUG_PORT}" "info"
@@ -142,8 +147,8 @@ eval "$START_CMD" | while IFS= read -r line; do
     line="${line%[[:space:]]}"
     [[ "$line" =~ Segmentation\ fault.*"${GAMEEXE}" ]] && continue
 
-    # Detect crash via cs2.sh crash message pattern
-    if [[ "$line" =~ \./game/cs2\.sh:.*Aborted.*\(core\ dumped\) ]]; then
+    # Detect crash via srcds crash pattern
+    if [[ "$line" =~ Segmentation\ fault|Aborted.*\(core\ dumped\) ]]; then
         handle_server_output "$line"
 
         log_message "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" "warning"
@@ -154,13 +159,13 @@ eval "$START_CMD" | while IFS= read -r line; do
         log_message "   • Try removing plugins one by one to identify the culprit" "info"
         log_message "" "warning"
         log_message "2. Addon Compatibility:" "info"
-        log_message "   • Verify MetaMod/CSS/SwiftlyS2/ModSharp versions are up to date" "info"
-        log_message "   • Check addon compatibility with current CS2 version" "info"
-        log_message "   • Review gameinfo.gi for correct addon load order" "info"
+        log_message "   • Verify MetaMod/SourceMod versions are up to date" "info"
+        log_message "   • Check addon compatibility with current CSGO version" "info"
+        log_message "   • Review gameinfo.txt for correct addon load order" "info"
         log_message "" "warning"
         log_message "3. Outdated Gamedata:" "info"
-        log_message "   • Check which plugins have outdated gamedata for current CS2 version" "info"
-        log_message "   • Visit: https://gdc.eternar.dev" "info"
+        log_message "   • Check which plugins have outdated gamedata for current CSGO version" "info"
+        log_message "   • Check SourceMod plugin compatibility" "info"
         log_message "" "warning"
         log_message "Review logs above for specific error messages and stack traces" "warning"
         log_message "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" "warning"
