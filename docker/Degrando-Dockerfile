@@ -16,10 +16,11 @@ RUN         apt update && \
             apt-get clean
 
 # Create directories and copy files
-RUN         mkdir -p /scripts /utils /plugins/nolobbyreservation /addons
+RUN         mkdir -p /scripts /utils /plugins/nolobbyreservation /fixes/steamfix /addons
 COPY        ./scripts /scripts/
 COPY        ./utils /utils/
 COPY        ./plugins/nolobbyreservation /plugins/nolobbyreservation/
+COPY        ./fixes/steamfix /fixes/steamfix/
 COPY        ./addons /addons/
 COPY        ./entrypoint.sh /entrypoint.sh
 
@@ -29,6 +30,7 @@ RUN         chmod 555 /scripts/*.sh && \
             chmod 555 /utils/*.sh && \
             chmod 555 /entrypoint.sh && \
             chmod 444 /plugins/nolobbyreservation/* && \
+            chmod 444 /fixes/steamfix/* && \
             chmod 444 /addons/*
 
 USER        container

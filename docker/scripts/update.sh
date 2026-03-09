@@ -55,6 +55,32 @@ install_nolobbyreservation() {
     return 0
 }
 
+# Install bundled CSGO steam fix extension files for SourceMod.
+install_csgo_steamfix() {
+    local ext_dir="./csgo/addons/sourcemod/extensions"
+    local ext_file="$ext_dir/csgo_steamfix.ext.so"
+    local autoload_file="$ext_dir/csgo_steamfix.autoload"
+
+    # Skip when already installed.
+    if [ -f "$ext_file" ] && [ -f "$autoload_file" ]; then
+        log_message "csgo_steamfix already installed" "debug"
+        return 0
+    fi
+
+    mkdir -p "$ext_dir" 2>/dev/null
+
+    if [ -f "/fixes/steamfix/csgo_steamfix.ext.so" ] && [ -f "/fixes/steamfix/csgo_steamfix.autoload" ]; then
+        cp -f /fixes/steamfix/csgo_steamfix.ext.so "$ext_file"
+        cp -f /fixes/steamfix/csgo_steamfix.autoload "$autoload_file"
+        log_message "Installed csgo_steamfix extension files" "success"
+    else
+        log_message "csgo_steamfix files not found in image" "warning"
+        return 1
+    fi
+
+    return 0
+}
+
 # Main addon update function based on boolean variables
 update_addons() {
     # Cleanup if enabled
@@ -97,6 +123,12 @@ update_addons() {
         # Install nolobbyreservation plugin (required for new CSGO AppID 4465480)
         # Without this plugin, clients cannot connect to the server
         install_nolobbyreservation
+
+        # Install bundled steam fix extension files for SourceMod servers.
+        install_csgo_steamfix
+    elif [ -d "./csgo/addons/sourcemod/extensions" ]; then
+        # If SourceMod already exists from previous setup, ensure fix files are present.
+        install_csgo_steamfix
     fi
 
     # CSGO uses VDF-based MetaMod loading, no gameinfo.txt reordering needed
