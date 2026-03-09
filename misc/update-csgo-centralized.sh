@@ -470,6 +470,8 @@ update_csgo() {
         sed -i 's/appID=730/appID=4465480/' "$steam_inf"
         log_info "Patched steam.inf: appID=730 -> 4465480"
     fi
+    # Create/update steamappid.txt
+    echo "4465480" > "$CSGO_DIR/steamappid.txt"
 
     local size=$(du -sh "$CSGO_DIR" 2>/dev/null | cut -f1)
     log_info "CSGO directory size: ${BOLD}$size${RESET}"

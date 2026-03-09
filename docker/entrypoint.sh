@@ -123,6 +123,9 @@ if [ -f "$STEAM_INF" ]; then
     fi
 fi
 
+# Also create/update steamappid.txt (engine reads this for Steam API init)
+echo "4465480" > /home/container/steamappid.txt
+
 # Handle the addon installations based on the selection
 update_addons
 
